@@ -3,6 +3,7 @@
 package widgets
 
 import (
+	"bytes"
 	"fmt"
 	"image"
 	"image/color"
@@ -10,7 +11,10 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/h2non/bimg"
+	"github.com/kolesa-team/go-webp/decoder"
 	"github.com/kolesa-team/go-webp/encoder"
+	"github.com/kolesa-team/go-webp/webp"
 
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
@@ -19,8 +23,6 @@ import (
 
 	"wv2/types"
 	"wv2/utils"
-
-	"github.com/octu0/blurry"
 )
 
 var (
@@ -80,15 +82,22 @@ func resizeImage(img image.Image, factor int) draw.Image {
 	return dst
 }
 
-func growImage(img *image.RGBA, factor int) *image.RGBA {
-	bImg, err := blurry.Scale(img, factor, factor, blurry.ScaleFilterGaussian)
+func scaleImage(imgBuf []byte, width, height int) (image.Image, error) {
+	// Read the image from the bytes
+	newImage := bimg.NewImage(imgBuf)
+	resized, err := newImage.ResizeAndCrop(width, height)
 
 	if err != nil {
-		fmt.Println(err)
-		return img
+		return nil, err
 	}
 
-	return bImg
+	// Re-encode to webp
+	buf := bytes.NewBuffer(resized)
+	webpBuf, err := webp.Decode(buf, &decoder.Options{})
+
+	// Convert to draw.Image
+
+	return webpBuf, nil
 }
 
 func copyImage(x, y int, img image.Image) {
@@ -174,18 +183,27 @@ func DrawWidget(bot types.WidgetUser) image.Image {
 	addLabel(mainImg.(*image.RGBA), titleSize, textIndent, listicon.Bounds().Dy()+textIndent+extraTopIndent, []string{"Fates List"})
 
 	// Resive avatar
-	avatarImg := resizeImage(bot.AvatarBytes, avatarScaleFactor)
+	var avatarImg image.Image
+	avatarImg = resizeImage(bot.AvatarBytes, 1)
 
 	fmt.Println(bot.AvatarBytes.Bounds().Dx())
 
-	if bot.AvatarBytes.Bounds().Dx() > 1024 {
-		avatarImg = resizeImage(avatarImg, avatarScaleFactor)
-	} else if bot.AvatarBytes.Bounds().Dx() < 512 {
-		// Convert draw.Image to RGBA
-		avatarImgD := avatarImg.(*image.RGBA)
+	// Convert draw.Image to RGBA
+	fmt.Println("Trying to resize")
+	avatarImgD := avatarImg.(*image.RGBA)
 
-		// Resize avatar to 512x512
-		avatarImg = growImage(avatarImgD, 512)
+	// Resize avatar to 512x512
+	var w = bytes.NewBuffer([]byte{})
+	err := webp.Encode(w, avatarImgD, OptionsE)
+
+	if err == nil {
+		avatarImg, err = scaleImage(w.Bytes(), 128, 128)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+		fmt.Println(err)
 	}
 
 	/* Now insert the avatar image into the main image.

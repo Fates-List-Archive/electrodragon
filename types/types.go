@@ -9,6 +9,7 @@ import (
 	"time"
 	"wv2/utils"
 
+	"github.com/h2non/bimg"
 	"golang.org/x/image/webp"
 )
 
@@ -65,6 +66,15 @@ func (w *WidgetUser) ParseData() error {
 	}
 
 	fmt.Println("Guessed type:", imgType)
+
+	if imgType != "WEBP" {
+		// Convert to webp using bimg
+		imgBytes, err = bimg.NewImage(imgBytes).Convert(bimg.WEBP)
+
+		if err != nil {
+			return err
+		}
+	}
 
 	r = bytes.NewReader(imgBytes)
 
