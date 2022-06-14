@@ -1,28 +1,131 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"time"
 	"wv2/types"
 	"wv2/widgets"
+
+	integrase "github.com/MetroReviews/metro-integrase/lib"
+	"github.com/gorilla/mux"
+	"github.com/kolesa-team/go-webp/webp"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
-// In prod, this will be from some source
-var botList = []types.WidgetUser{
-	{
-		ID:       "564164277251080208",
-		Username: "selectthegang",
-		Avatar:   "https://cdn.discordapp.com/avatars/564164277251080208/7cb4cdee538d9621aa80e14bfed106d8.webp?size=1024",
-		OutFile:  "tmp/select.webp",
-	},
-}
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
+const (
+	notFoundPage  = "{\"message\":\"NotFound\"}"
+	internalError = "{\"message\":\"InternalError\"}"
+)
+
+var (
+	devMode bool
+	api     string = "http://localhost:3010"
+)
 
 func main() {
-	for _, bot := range botList {
-		fmt.Println(bot.Username)
-		err := bot.ParseData()
+	flag.BoolVar(&devMode, "dev", false, "Enable development mode")
+
+	flag.Parse()
+
+	if devMode {
+		api = "https://api.fateslist.xyz"
+	}
+
+	r := mux.NewRouter()
+
+	adp := DummyAdapter{}
+
+	r.HandleFunc("/widgets/{id}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+
+		id := vars["id"]
+
+		// Fetch bot from api-v3 blazefire
+		req, err := http.NewRequest("GET", api+"/blazefire/"+id, nil)
+
 		if err != nil {
 			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(internalError))
+			return
 		}
-		widgets.DrawWidget(bot)
-	}
+
+		client := http.Client{Timeout: 10 * time.Second}
+
+		resp, err := client.Do(req)
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(internalError))
+			return
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			fmt.Println(resp.StatusCode)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Invalid status code from main site: " + resp.Status))
+			return
+		}
+
+		// Read the user info from the response
+		var user types.User
+
+		defer resp.Body.Close()
+
+		bytes, err := ioutil.ReadAll(resp.Body)
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+
+		err = json.Unmarshal(bytes, &user)
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+
+		widgetData := types.WidgetUser{
+			ID:       user.ID,
+			Username: user.Username,
+			Avatar:   user.Avatar,
+			Disc:     user.Disc,
+			Bot:      user.Bot,
+		}
+
+		err = widgetData.ParseData()
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+
+		img := widgets.DrawWidget(widgetData)
+
+		w.Header().Set("Content-Type", "image/webp")
+		w.Header().Set("Cache-Control", "public, max-age=28800")
+		w.Header().Set("Expires", time.Now().Add(time.Hour*8).Format(http.TimeFormat))
+
+		err = webp.Encode(w, img, widgets.OptionsE)
+	})
+
+	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(notFoundPage))
+	})
+
+	integrase.StartServer(adp, r)
+
 }

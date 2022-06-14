@@ -16,12 +16,12 @@ type WidgetUser struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
 	Avatar   string `json:"avatar"`
+	Disc     string `json:"disc"`
 
 	// This must be created by API call
 	AvatarBytes image.Image `json:"avatar_bytes"`
 
-	// Temporary
-	OutFile string
+	Bot bool `json:"bot"`
 }
 
 func (w *WidgetUser) ParseData() error {
@@ -78,4 +78,13 @@ func (w *WidgetUser) ParseData() error {
 
 	// Parse avatar into image.Image
 	return nil
+}
+
+type User struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
+	Bot      bool   `json:"bot"`
+	Disc     string `json:"discriminator"`
+	Status   string `json:"status"`
 }
