@@ -6,6 +6,7 @@ import (
 	"image"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"time"
 	"wv2/utils"
 
@@ -27,7 +28,7 @@ type WidgetUser struct {
 
 func (w *WidgetUser) ParseData() error {
 	// Download avatar using net/http
-	req, err := http.NewRequest("GET", w.Avatar, nil)
+	req, err := http.NewRequest("GET", strings.Replace(w.Avatar, ".gif", ".webp", 1), nil)
 
 	if err != nil {
 		return err
