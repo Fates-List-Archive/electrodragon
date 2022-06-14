@@ -182,10 +182,10 @@ func DrawWidget(bot types.WidgetUser) image.Image {
 		avatarImg = resizeImage(avatarImg, avatarScaleFactor)
 	} else if bot.AvatarBytes.Bounds().Dx() < 512 {
 		// Convert draw.Image to RGBA
-		avatarImg := avatarImg.(*image.RGBA)
+		avatarImgD := avatarImg.(*image.RGBA)
 
 		// Resize avatar to 512x512
-		avatarImg = growImage(avatarImg, 512)
+		avatarImg = growImage(avatarImgD, 512)
 	}
 
 	/* Now insert the avatar image into the main image.
