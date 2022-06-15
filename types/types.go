@@ -26,6 +26,7 @@ type WidgetUser struct {
 	Bot bool `json:"bot"`
 
 	// Whether or not its a server or not
+	Server bool `json:"server"`
 }
 
 func (w *WidgetUser) ParseData() error {
