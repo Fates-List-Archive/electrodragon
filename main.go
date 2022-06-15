@@ -159,7 +159,7 @@ func main() {
 		}
 	})
 
-	r.HandleFunc("/_quailfeather/ap/schema", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/_quailfeather/ap/schema", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
 		opts := utils.SchemaFilter{}
 
 		if r.URL.Query().Get("table_name") != "" {
@@ -184,9 +184,9 @@ func main() {
 		}
 
 		w.Write(bytes)
-	})
+	}))
 
-	r.HandleFunc("/_quailfeather/ap/schema/allowed-tables", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/_quailfeather/ap/schema/allowed-tables", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
 		auth, err := utils.AuthorizeUser(utils.AuthRequest{
 			UserID:  r.URL.Query().Get("user_id"),
 			Token:   r.Header.Get("Authorization"),
@@ -212,7 +212,7 @@ func main() {
 		}
 
 		w.Write(bytes)
-	})
+	}))
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

@@ -359,3 +359,19 @@ func AuthorizeUser(req AuthRequest) (*authResponse, error) {
 
 	return resp, nil
 }
+
+type HFunc = func(w http.ResponseWriter, r *http.Request)
+
+func CorsWrap(fn HFunc) HFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, PATCH, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Frostpaw-ID, Frostpaw-MFA, Authorization")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		if r.Method == "OPTIONS" {
+			w.Write([]byte(""))
+			return
+		}
+		fn(w, r)
+	}
+}
