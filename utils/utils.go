@@ -3,13 +3,22 @@ package utils
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
+	"net/http"
 	"reflect"
+	"strings"
+	"time"
+
+	jsoniter "github.com/json-iterator/go"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"github.com/pquerna/otp/totp"
 )
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 var sqlxPool *sqlx.DB
 
@@ -197,4 +206,156 @@ WHERE table_schema = 'public' order by table_name, ordinal_position
 	}
 
 	return result, nil
+}
+
+type UserPerms struct {
+	Perm    float64 `json:"perm"`
+	ID      string  `json:"id"`
+	StaffID string  `json:"staff_id"`
+	Fname   string  `json:"fname"`
+}
+
+// Gets the permissions of a user from baypaw
+func GetPermissions(devMode bool, userID string) (*UserPerms, error) {
+	var api string
+	if devMode {
+		api = "https://api.fateslist.xyz/baypaw/perms/"
+	} else {
+		api = "http://localhost:1234/perms/"
+	}
+	req, err := http.NewRequest("GET", api+userID, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	client := &http.Client{Timeout: 10 * time.Second}
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	var perms UserPerms
+
+	err = json.NewDecoder(resp.Body).Decode(&perms)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &perms, nil
+}
+
+func allowedTables(devMode bool, userID string, perms UserPerms) []string {
+	if perms.Perm < 5 {
+		return []string{"reviews", "review_votes", "bot_packs", "vanity", "leave_of_absence", "user_vote_table",
+			"lynx_surveys", "lynx_survey_responses"}
+	}
+	return []string{}
+}
+
+type AuthRequest struct {
+	// The users ID
+	UserID string
+
+	// User API token
+	Token string
+
+	// 2FA code
+	TOTP string
+
+	// Developer mode or not
+	DevMode bool
+
+	// The context of the request
+	Context context.Context
+
+	// The pgx database used
+	DB *pgxpool.Pool
+}
+
+type authResponse struct {
+	// The users permissions
+	Perms UserPerms
+
+	// If the user is not staff verified, this will be set to true
+	Verified bool
+
+	// If the user is MFA key verified or not
+	MFA bool
+
+	// The allowed tables of the user, empty slice if all are allowed
+	AllowedTables []string
+}
+
+// Helper function to authenticate a user
+func AuthorizeUser(req AuthRequest) (*authResponse, error) {
+	if req.Token == "" {
+		return nil, errors.New("no token provided")
+	}
+
+	perms, err := GetPermissions(req.DevMode, req.UserID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check auth token
+	var count int
+	err = req.DB.QueryRow(req.Context, "SELECT COUNT(1) FROM users WHERE user_id = $1 AND api_token = $2", req.UserID, strings.ReplaceAll(req.Token, " ", "")).Scan(&count)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if count > 1 {
+		// Delete all other users with this ID
+		_, err = req.DB.Exec(req.Context, "DELETE FROM users WHERE user_id = $1", req.UserID)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, errors.New("multiple users with this ID. Retry logging in now as all users with this ID have been deleted")
+	}
+
+	if count == 0 {
+		return nil, errors.New("invalid token")
+	}
+
+	// Check staff verify code
+	var staffVerifyCode string
+
+	req.DB.QueryRow(req.Context, "SELECT staff_verify_code FROM users WHERE user_id = $1", req.UserID).Scan(&staffVerifyCode)
+
+	var verified bool
+
+	if req.DevMode {
+		verified = checkCodeDev(req.UserID, staffVerifyCode)
+	} else {
+		verified = checkCodeSecure(req.UserID, staffVerifyCode)
+	}
+
+	// Check MFA
+	var totpKey string
+	var mfa bool
+
+	req.DB.QueryRow(req.Context, "SELECT totp_shared_key FROM users WHERE user_id = $1", req.UserID).Scan(&totpKey)
+
+	if totpKey != "" && req.TOTP != "" && totp.Validate(req.TOTP, totpKey) {
+		mfa = true
+	}
+
+	resp := &authResponse{
+		Perms:         *perms,
+		Verified:      verified,
+		MFA:           mfa,
+		AllowedTables: allowedTables(req.DevMode, req.UserID, *perms),
+	}
+
+	return resp, nil
 }

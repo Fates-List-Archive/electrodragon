@@ -22,8 +22,8 @@ import (
 )
 
 const (
-	notFoundPage  = "{\"message\":\"NotFound\"}"
-	internalError = "{\"message\":\"InternalError\"}"
+	notFoundPage  = "Not Found"
+	internalError = "Something went wrong"
 )
 
 var (
@@ -175,6 +175,34 @@ func main() {
 		}
 
 		bytes, err := json.Marshal(res)
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(internalError))
+			return
+		}
+
+		w.Write(bytes)
+	})
+
+	r.HandleFunc("/_quailfeather/ap/schema/allowed-tables", func(w http.ResponseWriter, r *http.Request) {
+		auth, err := utils.AuthorizeUser(utils.AuthRequest{
+			UserID:  r.URL.Query().Get("user_id"),
+			Token:   r.Header.Get("Authorization"),
+			DevMode: devMode,
+			Context: ctx,
+			DB:      pool,
+		})
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		bytes, err := json.Marshal(auth.AllowedTables)
 
 		if err != nil {
 			fmt.Println(err)
