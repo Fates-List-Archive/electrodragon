@@ -253,6 +253,53 @@ func main() {
 		json.NewEncoder(w).Encode(doctree)
 	}))
 
+	r.HandleFunc(`/docs/{rest:[a-zA-Z0-9=\-\/]+}`, utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
+		path := mux.Vars(r)["rest"]
+
+		if strings.HasSuffix(path, ".md") {
+			path = strings.Replace(path, ".md", "", 1)
+		}
+
+		if path == "" || path == "/docs" {
+			path = "/index"
+		}
+
+		// Check if the file exists
+		fmt.Println("api-docs/" + path + ".md")
+		if _, err := os.Stat("api-docs/" + path + ".md"); os.IsNotExist(err) {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		// Read the file
+		file, err := ioutil.ReadFile("api-docs/" + path + ".md")
+
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(internalError))
+			return
+		}
+
+		var data = types.Doc{}
+
+		data.MD = string(file)
+
+		// Look for javascript file in same place
+		if _, err := os.Stat("api-docs/" + path + ".js"); err == nil {
+			file, err := ioutil.ReadFile("api-docs/" + path + ".js")
+
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(internalError))
+				return
+			}
+
+			data.JS = string(file)
+		}
+
+		json.NewEncoder(w).Encode(data)
+	}))
+
 	// Admin panel
 	r.HandleFunc("/ap/schema", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
 		opts := utils.SchemaFilter{}

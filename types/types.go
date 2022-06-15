@@ -106,3 +106,8 @@ type Label struct {
 	X        int
 	Y        int
 }
+
+type Doc struct {
+	MD string `json:"data"`
+	JS string `json:"js"`
+}
