@@ -254,7 +254,7 @@ This is to allow reuse of the Bot struct in Get Bot Settings which *does* contai
 - **events** => (Array) Struct BotEvent 
 	- **id** => string [ex "Some UUID here"]
 	- **event_type** => i32 [ex 0]
-	- **ts** => string [ex "2022-06-04T04:55:36.320347985Z"]
+	- **ts** => string [ex "2022-06-15T17:46:32.213907639Z"]
 	- **reason** => string [ex "Some reason here"]
 	- **css** => string [ex "Some CSS here"]
 
@@ -369,7 +369,7 @@ This is to allow reuse of the Bot struct in Get Bot Settings which *does* contai
         {
             "id": "Some UUID here",
             "event_type": 0,
-            "ts": "2022-06-04T04:55:36.320347985Z",
+            "ts": "2022-06-15T17:46:32.213907639Z",
             "reason": "Some reason here",
             "css": "Some CSS here"
         }
@@ -515,7 +515,7 @@ Staff members *must* instead use Lynx.
 	- **events** => (Array) Struct BotEvent 
 		- **id** => string [ex "Some UUID here"]
 		- **event_type** => i32 [ex 0]
-		- **ts** => string [ex "2022-06-04T04:55:36.320437684Z"]
+		- **ts** => string [ex "2022-06-15T17:46:32.213963427Z"]
 		- **reason** => string [ex "Some reason here"]
 		- **css** => string [ex "Some CSS here"]
 
@@ -654,7 +654,7 @@ Staff members *must* instead use Lynx.
             {
                 "id": "Some UUID here",
                 "event_type": 0,
-                "ts": "2022-06-04T04:55:36.320437684Z",
+                "ts": "2022-06-15T17:46:32.213963427Z",
                 "reason": "Some reason here",
                 "css": "Some CSS here"
             }
@@ -728,7 +728,7 @@ def random_bot():
 
 
 - **flags** => (Array) 
-- **created_at** => string [ex "2022-06-04T04:55:36.320501292Z"]
+- **created_at** => string [ex "2022-06-15T17:46:32.214017317Z"]
 
 
 
@@ -750,7 +750,7 @@ def random_bot():
         "status": "Unknown"
     },
     "flags": [],
-    "created_at": "2022-06-04T04:55:36.320501292Z"
+    "created_at": "2022-06-15T17:46:32.214017317Z"
 }
 ```
 
@@ -885,7 +885,7 @@ to false.
 - **events** => (Array) Struct BotEvent 
 	- **id** => string [ex "Some UUID here"]
 	- **event_type** => i32 [ex 0]
-	- **ts** => string [ex "2022-06-04T04:55:36.320514577Z"]
+	- **ts** => string [ex "2022-06-15T17:46:32.214026803Z"]
 	- **reason** => string [ex "Some reason here"]
 	- **css** => string [ex "Some CSS here"]
 
@@ -1000,7 +1000,7 @@ to false.
         {
             "id": "Some UUID here",
             "event_type": 0,
-            "ts": "2022-06-04T04:55:36.320514577Z",
+            "ts": "2022-06-15T17:46:32.214026803Z",
             "reason": "Some reason here",
             "css": "Some CSS here"
         }
@@ -1163,7 +1163,7 @@ to false.
 - **events** => (Array) Struct BotEvent 
 	- **id** => string [ex "Some UUID here"]
 	- **event_type** => i32 [ex 0]
-	- **ts** => string [ex "2022-06-04T04:55:36.320566243Z"]
+	- **ts** => string [ex "2022-06-15T17:46:32.214071352Z"]
 	- **reason** => string [ex "Some reason here"]
 	- **css** => string [ex "Some CSS here"]
 
@@ -1278,7 +1278,7 @@ to false.
         {
             "id": "Some UUID here",
             "event_type": 0,
-            "ts": "2022-06-04T04:55:36.320566243Z",
+            "ts": "2022-06-15T17:46:32.214071352Z",
             "reason": "Some reason here",
             "css": "Some CSS here"
         }

@@ -243,6 +243,10 @@ func main() {
 				return nil
 			}
 
+			if strings.HasSuffix(path, ".js") {
+				return nil
+			}
+
 			splitted := strings.Split(strings.Replace(path, "api-docs/", "", -1), "/")
 
 			doctree = append(doctree, splitted)
