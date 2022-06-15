@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"flag"
 	"fmt"
 	"image/png"
@@ -9,16 +10,16 @@ import (
 	"net/http"
 	"time"
 	"wv2/types"
+	"wv2/utils"
 	"wv2/widgets"
 
 	integrase "github.com/MetroReviews/metro-integrase/lib"
 	"github.com/gorilla/mux"
 	"github.com/h2non/bimg"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	jsoniter "github.com/json-iterator/go"
 )
-
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 const (
 	notFoundPage  = "{\"message\":\"NotFound\"}"
@@ -26,6 +27,8 @@ const (
 )
 
 var (
+	ctx     = context.Background()
+	json    = jsoniter.ConfigCompatibleWithStandardLibrary
 	devMode bool
 	api     string = "http://localhost:3010"
 )
@@ -34,6 +37,14 @@ func main() {
 	flag.BoolVar(&devMode, "dev", false, "Enable development mode")
 
 	flag.Parse()
+
+	pool, err := pgxpool.Connect(ctx, "")
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(pool.Ping(ctx))
 
 	if devMode {
 		api = "https://api.fateslist.xyz"
@@ -146,6 +157,33 @@ func main() {
 
 			w.Write(bimgImg)
 		}
+	})
+
+	r.HandleFunc("/_quailfeather/ap/schema", func(w http.ResponseWriter, r *http.Request) {
+		opts := utils.SchemaFilter{}
+
+		if r.URL.Query().Get("table_name") != "" {
+			opts.TableName = r.URL.Query().Get("table_name")
+		}
+
+		res, err := utils.GetSchema(ctx, pool, opts)
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(internalError))
+			return
+		}
+
+		bytes, err := json.Marshal(res)
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(internalError))
+			return
+		}
+
+		w.Write(bytes)
 	})
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
