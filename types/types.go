@@ -22,7 +22,10 @@ type WidgetUser struct {
 	// This must be created by API call
 	AvatarBytes image.Image `json:"avatar_bytes"`
 
+	// Whether or not its a bot or not
 	Bot bool `json:"bot"`
+
+	// Whether or not its a server or not
 }
 
 func (w *WidgetUser) ParseData() error {
