@@ -7,9 +7,9 @@ import (
 	"image/png"
 	"io/ioutil"
 	"net/http"
-	"strings"
 	"time"
 
+	"github.com/golang/freetype/truetype"
 	"github.com/h2non/bimg"
 )
 
@@ -27,7 +27,7 @@ type WidgetUser struct {
 
 func (w *WidgetUser) ParseData() error {
 	// Download avatar using net/http
-	req, err := http.NewRequest("GET", strings.Replace(w.Avatar, ".gif", ".webp", 1), nil)
+	req, err := http.NewRequest("GET", w.Avatar, nil)
 
 	if err != nil {
 		return err
@@ -57,8 +57,6 @@ func (w *WidgetUser) ParseData() error {
 
 	fmt.Println("Image bytes:", len(imgBytes))
 
-	r := bytes.NewReader(imgBytes)
-
 	// Convert to png using bimg
 	imgBytes, err = bimg.NewImage(imgBytes).Convert(bimg.PNG)
 
@@ -66,7 +64,7 @@ func (w *WidgetUser) ParseData() error {
 		return err
 	}
 
-	r = bytes.NewReader(imgBytes)
+	r := bytes.NewReader(imgBytes)
 
 	avatar, err = png.Decode(r)
 
@@ -87,4 +85,14 @@ type User struct {
 	Bot      bool   `json:"bot"`
 	Disc     string `json:"discriminator"`
 	Status   string `json:"status"`
+}
+
+type Label struct {
+	DPI      float64
+	FontData *truetype.Font
+	Size     float64
+	Spacing  float64
+	Labels   []string
+	X        int
+	Y        int
 }

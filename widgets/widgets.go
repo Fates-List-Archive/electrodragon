@@ -11,12 +11,9 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/h2non/bimg"
-
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/draw"
-	"golang.org/x/image/font"
 
 	"wv2/imgtools"
 	"wv2/types"
@@ -39,70 +36,6 @@ const (
 	spacing           = 1.25 // Line spacing (e.g. size*spacing = line height)
 )
 
-func addLabel(img *image.RGBA, size float64, x, y int, label []string) (ptX, ptY int) {
-	c := freetype.NewContext()
-	c.SetDPI(dpi)
-	c.SetFont(fontD)
-	c.SetFontSize(size)
-	c.SetHinting(font.HintingNone)
-
-	// Set source (https://github.com/golang/freetype/blob/master/example/freetype/main.go)
-
-	c.SetClip(img.Bounds())
-	c.SetSrc(image.White)
-	c.SetDst(img)
-
-	// Draw the text.
-	lastLineLen := 0
-
-	pt := freetype.Pt(x, y+int(c.PointToFixed(size)>>6))
-	for _, s := range label {
-		_, err := c.DrawString(s, pt)
-		if err != nil {
-			fmt.Println(err)
-			return 0, 0
-		}
-		pt.Y += c.PointToFixed(size * spacing)
-		lastLineLen = len(s) + 1
-	}
-
-	return lastLineLen, pt.Y.Ceil()
-}
-
-func resizeImage(img image.Image, factor int) draw.Image {
-	// Read the image from the file
-	dst := image.NewRGBA(image.Rect(0, 0, img.Bounds().Max.X/factor, img.Bounds().Max.Y/factor))
-
-	draw.ApproxBiLinear.Scale(dst, dst.Rect, img, img.Bounds(), draw.Over, nil)
-
-	return dst
-}
-
-func scaleImage(imgBuf []byte, width, height int) (image.Image, error) {
-	// Read the image from the bytes
-	newImage := bimg.NewImage(imgBuf)
-	resized, err := newImage.ResizeAndCrop(width, height)
-
-	if err != nil {
-		return nil, err
-	}
-
-	// Re-encode to PNG
-	buf := bytes.NewBuffer(resized)
-	pngData, err := png.Decode(buf)
-
-	// Convert to draw.Image
-
-	return pngData, nil
-}
-
-func copyImage(x, y int, img image.Image) {
-	dp := image.Point{X: x, Y: y}
-
-	// Carve out rectangle for the image
-	draw.Draw(mainImg, image.Rectangle{Min: dp, Max: dp.Add(img.Bounds().Size())}, img, image.Point{}, draw.Src)
-}
-
 func getImageCenter(img image.Image) image.Point {
 	return image.Point{X: img.Bounds().Dx() / 2, Y: img.Bounds().Dy() / 2}
 }
@@ -115,17 +48,6 @@ func centeredImage(img image.Image) int {
 // Returns the X coordinate at which the image would be cenetred
 func centeredImageY(img image.Image) int {
 	return getImageCenter(mainImg).Y - getImageCenter(img).Y
-}
-
-// Returns a scale factor for the given text
-func getCenterScale(s string) int {
-	if len(s) < 6 {
-		return 0
-	} else if len(s) >= 6 && len(s) <= 8 {
-		return 1
-	} else {
-		return 2
-	}
 }
 
 func init() {
@@ -163,7 +85,21 @@ func init() {
 		panic(err)
 	}
 
-	listicon = resizeImage(listiconUnparsed, imgScaleFactor)
+	// Resize avatar to 512x512
+	var w = bytes.NewBuffer([]byte{})
+	err = png.Encode(w, listiconUnparsed)
+
+	if err == nil {
+		listiconDraw, err := imgtools.ScaleImage(w.Bytes(), 24, 24)
+
+		if err != nil {
+			panic(err)
+		}
+
+		listicon = imgtools.ResizeImage(listiconDraw, 1)
+	} else {
+		panic(err)
+	}
 }
 
 func DrawWidget(bot types.WidgetUser) image.Image {
@@ -173,13 +109,21 @@ func DrawWidget(bot types.WidgetUser) image.Image {
 	draw.Draw(mainImg, mainImg.Bounds(), &image.Uniform{color.Black}, image.Point{}, draw.Src)
 
 	// textIndent is the amount of space to leave on the left of the screen. Negative because positive means reverse direction.
-	copyImage(listicon.Bounds().Min.X+textIndent, listicon.Bounds().Min.Y+textIndent+extraTopIndent, listicon)
+	imgtools.CopyImage(textIndent, mainImg.Bounds().Dy()-listicon.Bounds().Dy()-textIndent-extraTopIndent, listicon, mainImg)
 
-	addLabel(mainImg.(*image.RGBA), titleSize, textIndent, listicon.Bounds().Dy()+textIndent+extraTopIndent, []string{"Fates List"})
+	imgtools.AddLabel(mainImg.(*image.RGBA), types.Label{
+		Size: titleSize,
+		X:    textIndent + listicon.Bounds().Dx() + textIndent,
+		// The Y coordinate is calculated as the main image height minus the height of the avatar minus text indents minus the amount of space to center it with the avatar (1/8 of avatar height).
+		Y:        mainImg.Bounds().Dy() - listicon.Bounds().Dy() - textIndent - extraTopIndent - listicon.Bounds().Dy()/8,
+		Labels:   []string{"Fates List"},
+		FontData: fontD,
+		DPI:      dpi,
+		Spacing:  spacing,
+	})
 
-	// Resive avatar
 	var avatarImg image.Image
-	avatarImg = resizeImage(bot.AvatarBytes, 1)
+	avatarImg = imgtools.ResizeImage(bot.AvatarBytes, 1)
 
 	fmt.Println(bot.AvatarBytes.Bounds().Dx())
 
@@ -192,7 +136,7 @@ func DrawWidget(bot types.WidgetUser) image.Image {
 	err := png.Encode(w, avatarImgD)
 
 	if err == nil {
-		avatarImg, err = scaleImage(w.Bytes(), 128, 128)
+		avatarImg, err = imgtools.ScaleImage(w.Bytes(), 128, 128)
 
 		if err != nil {
 			fmt.Println(err)
@@ -203,10 +147,18 @@ func DrawWidget(bot types.WidgetUser) image.Image {
 
 	/* Now insert the avatar image into the main image.
 	To get the point we insert at, we first find center of main image and subtract X of that from X of avatar image */
-	copyImage(centeredImage(avatarImg), centeredImageY(avatarImg), imgtools.Circle(avatarImg))
+	imgtools.CopyImage(centeredImage(avatarImg), centeredImageY(avatarImg), imgtools.Circle(avatarImg), mainImg)
 
 	// centeredImageY(avatarImg)+(getImageCenter(avatarImg).Y*2) means we add the center of the avatar image * 2 (to get diameter) to the center of the main image
-	addLabel(mainImg.(*image.RGBA), titleSize, centeredImage(avatarImg), centeredImageY(avatarImg)+(getImageCenter(avatarImg).Y*2), []string{bot.Username})
+	imgtools.AddLabel(mainImg.(*image.RGBA), types.Label{
+		Size:     titleSize,
+		X:        centeredImage(avatarImg),
+		Y:        centeredImageY(avatarImg) + (getImageCenter(avatarImg).Y * 2),
+		Labels:   []string{bot.Username},
+		FontData: fontD,
+		DPI:      dpi,
+		Spacing:  spacing,
+	})
 
 	fmt.Println("Ending draw")
 
