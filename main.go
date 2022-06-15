@@ -8,9 +8,12 @@ import (
 	"fmt"
 	"html/template"
 	"image/png"
+	"io/fs"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 	"wv2/types"
 	"wv2/utils"
@@ -226,6 +229,31 @@ func main() {
 		}
 	})
 
+	r.HandleFunc("/doctree", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		var doctree []any
+
+		// For every file, append its name into a slice, if its a directory, append its name and its children
+		filepath.WalkDir("api-docs", func(path string, info fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+
+			if info.IsDir() {
+				return nil
+			}
+
+			splitted := strings.Split(strings.Replace(path, "api-docs/", "", -1), "/")
+
+			doctree = append(doctree, splitted)
+			return nil
+		})
+
+		// Convert the slice into a json object
+		json.NewEncoder(w).Encode(doctree)
+	}))
+
+	// Admin panel
 	r.HandleFunc("/ap/schema", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
 		opts := utils.SchemaFilter{}
 
@@ -250,6 +278,7 @@ func main() {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		w.Write(bytes)
 	}))
 
