@@ -6,6 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"html/template"
 	"image/png"
 	"io/ioutil"
 	"net/http"
@@ -30,11 +31,20 @@ const (
 )
 
 var (
-	ctx     = context.Background()
-	json    = jsoniter.ConfigCompatibleWithStandardLibrary
-	devMode bool
-	api     string = "http://localhost:3010"
+	ctx        = context.Background()
+	json       = jsoniter.ConfigCompatibleWithStandardLibrary
+	devMode    bool
+	api        string = "http://localhost:3010"
+	widgetdocs *template.Template
 )
+
+func init() {
+	var err error
+	widgetdocs, err = template.ParseFiles("templates/widgetdocs.html")
+	if err != nil {
+		panic(err)
+	}
+}
 
 func main() {
 	flag.BoolVar(&devMode, "dev", false, "Enable development mode")
@@ -98,6 +108,12 @@ func main() {
 		vars := mux.Vars(r)
 
 		id := vars["id"]
+
+		if id == "docs" {
+			// Send over html docs here
+			widgetdocs.Execute(w, nil)
+			return
+		}
 
 		// Fetch bot from api-v3 blazefire
 		req, err := http.NewRequest("GET", api+"/blazefire/"+id, nil)
@@ -164,7 +180,18 @@ func main() {
 			w.Write([]byte(err.Error()))
 		}
 
-		img := widgets.DrawWidget(widgetData)
+		bgcolor := r.URL.Query().Get("bgcolor")
+
+		img, err := widgets.DrawWidget(widgetData, types.WidgetOptions{
+			Bgcolor: bgcolor,
+		})
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
+		}
 
 		w.Header().Set("Cache-Control", "public, max-age=28800")
 		w.Header().Set("Expires", time.Now().Add(time.Hour*8).Format(http.TimeFormat))

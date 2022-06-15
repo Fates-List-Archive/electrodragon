@@ -7,6 +7,7 @@ import (
 	"image"
 	"image/color"
 	"image/png"
+	"math"
 	"wv2/types"
 
 	"github.com/golang/freetype"
@@ -44,10 +45,10 @@ func (c *circle) At(x, y int) color.Color {
 	return color.RGBA{0, 0, 0, 0}
 }
 
-func Circle(src image.Image) image.Image {
+func Circle(src image.Image, colorEdge color.Color) image.Image {
 	// create a pure black dst img
 	dst := image.NewRGBA(src.Bounds())
-	draw.Draw(dst, dst.Bounds(), image.NewUniform(color.RGBA{0, 0, 0, 255}), image.Point{}, draw.Src)
+	draw.Draw(dst, dst.Bounds(), image.NewUniform(colorEdge), image.Point{}, draw.Src)
 
 	r := src.Bounds().Dx() / 2
 	p := image.Point{
@@ -136,7 +137,7 @@ func AddLabel(img *image.RGBA, label types.Label) (ptX, ptY int) {
 	// Set source (https://github.com/golang/freetype/blob/master/example/freetype/main.go)
 
 	c.SetClip(img.Bounds())
-	c.SetSrc(image.White)
+	c.SetSrc(image.NewUniform(label.Color))
 	c.SetDst(img)
 
 	// Draw the text.
@@ -170,4 +171,27 @@ func CopyImage(x, y int, img image.Image, dst draw.Image) {
 
 	// Carve out rectangle for the image
 	draw.Draw(dst, image.Rectangle{Min: dp, Max: dp.Add(img.Bounds().Size())}, img, image.Point{}, draw.Src)
+}
+
+func GetColorSimilarity(c1 color.Color, c2 color.Color) float64 {
+	r1, g1, b1, _ := c1.RGBA()
+	r2, g2, b2, _ := c2.RGBA()
+
+	return math.Abs(float64(r1-r2)) + math.Abs(float64(g1-g2)) + math.Abs(float64(b1-b2))
+}
+
+func ReplaceImageColor(img draw.Image, c1 color.Color, c2 color.Color) *image.RGBA {
+	// Copy image
+	dst := image.NewRGBA(img.Bounds())
+	draw.Draw(dst, dst.Bounds(), img, image.Point{}, draw.Src)
+
+	for x := dst.Bounds().Min.X; x < dst.Bounds().Max.X; x++ {
+		for y := dst.Bounds().Min.Y; y < dst.Bounds().Max.Y; y++ {
+			if GetColorSimilarity(dst.At(x, y), c1) < 100 {
+				dst.Set(x, y, c2)
+			}
+		}
+	}
+
+	return dst
 }

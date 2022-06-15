@@ -9,6 +9,7 @@ require (
 	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/gorilla/handlers v1.5.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/icza/gox v0.0.0-20220321141217-e2d488ab2fbc // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgx v3.6.2+incompatible // indirect

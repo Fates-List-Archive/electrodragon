@@ -10,6 +10,7 @@ import (
 	"image/png"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
@@ -17,6 +18,8 @@ import (
 
 	"wv2/imgtools"
 	"wv2/types"
+
+	"github.com/icza/gox/imagex/colorx"
 )
 
 var (
@@ -102,21 +105,44 @@ func init() {
 	}
 }
 
-func DrawWidget(bot types.WidgetUser) image.Image {
+func DrawWidget(bot types.WidgetUser, opts types.WidgetOptions) (image.Image, error) {
 	// Draw a 640x480 black rectangle first
 	fmt.Println("Starting draw")
 
-	draw.Draw(mainImg, mainImg.Bounds(), &image.Uniform{color.Black}, image.Point{}, draw.Src)
+	var bgcolor color.Color
+
+	if opts.Bgcolor != "" {
+		// Parse RGB to color
+		var err error
+		bgcolor, err = colorx.ParseHexColor("#" + strings.ReplaceAll(opts.Bgcolor, "H", ""))
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		bgcolor = color.Black
+	}
+
+	textcolor := color.White
+
+	// Detect if bgcolor is dark
+	if imgtools.GetColorSimilarity(bgcolor, textcolor) < 0.5 {
+		textcolor = color.Black
+	}
+
+	listiconData := imgtools.ReplaceImageColor(listicon, color.Black, bgcolor)
+
+	draw.Draw(mainImg, mainImg.Bounds(), &image.Uniform{bgcolor}, image.Point{}, draw.Src)
 
 	// textIndent is the amount of space to leave on the left of the screen. Negative because positive means reverse direction.
-	imgtools.CopyImage(textIndent, mainImg.Bounds().Dy()-listicon.Bounds().Dy()-textIndent-extraTopIndent, listicon, mainImg)
+	imgtools.CopyImage(textIndent, mainImg.Bounds().Dy()-listiconData.Bounds().Dy()-textIndent-extraTopIndent, listiconData, mainImg)
 
 	imgtools.AddLabel(mainImg.(*image.RGBA), types.Label{
 		Size: titleSize,
-		X:    textIndent + listicon.Bounds().Dx() + textIndent,
+		X:    textIndent + listiconData.Bounds().Dx() + textIndent,
 		// The Y coordinate is calculated as the main image height minus the height of the avatar minus text indents minus the amount of space to center it with the avatar (1/8 of avatar height).
-		Y:        mainImg.Bounds().Dy() - listicon.Bounds().Dy() - textIndent - extraTopIndent - listicon.Bounds().Dy()/8,
+		Y:        mainImg.Bounds().Dy() - listiconData.Bounds().Dy() - textIndent - extraTopIndent - listiconData.Bounds().Dy()/8,
 		Labels:   []string{"Fates List"},
+		Color:    textcolor,
 		FontData: fontD,
 		DPI:      dpi,
 		Spacing:  spacing,
@@ -147,7 +173,7 @@ func DrawWidget(bot types.WidgetUser) image.Image {
 
 	/* Now insert the avatar image into the main image.
 	To get the point we insert at, we first find center of main image and subtract X of that from X of avatar image */
-	imgtools.CopyImage(centeredImage(avatarImg), centeredImageY(avatarImg), imgtools.Circle(avatarImg), mainImg)
+	imgtools.CopyImage(centeredImage(avatarImg), centeredImageY(avatarImg), imgtools.Circle(avatarImg, bgcolor), mainImg)
 
 	// centeredImageY(avatarImg)+(getImageCenter(avatarImg).Y*2) means we add the center of the avatar image * 2 (to get diameter) to the center of the main image
 	imgtools.AddLabel(mainImg.(*image.RGBA), types.Label{
@@ -156,11 +182,12 @@ func DrawWidget(bot types.WidgetUser) image.Image {
 		Y:        centeredImageY(avatarImg) + (getImageCenter(avatarImg).Y * 2),
 		Labels:   []string{bot.Username},
 		FontData: fontD,
+		Color:    textcolor,
 		DPI:      dpi,
 		Spacing:  spacing,
 	})
 
 	fmt.Println("Ending draw")
 
-	return mainImg
+	return mainImg, nil
 }

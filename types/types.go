@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"image"
+	"image/color"
 	"image/png"
 	"io/ioutil"
 	"net/http"
@@ -12,6 +13,10 @@ import (
 	"github.com/golang/freetype/truetype"
 	"github.com/h2non/bimg"
 )
+
+type WidgetOptions struct {
+	Bgcolor string
+}
 
 type WidgetUser struct {
 	ID       string `json:"id"`
@@ -97,6 +102,7 @@ type Label struct {
 	Size     float64
 	Spacing  float64
 	Labels   []string
+	Color    color.Color
 	X        int
 	Y        int
 }
