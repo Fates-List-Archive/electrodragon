@@ -3,11 +3,13 @@ package main
 import (
 	"bytes"
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"image/png"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 	"wv2/types"
 	"wv2/utils"
@@ -17,6 +19,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/h2non/bimg"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/valyala/fastjson"
 
 	jsoniter "github.com/json-iterator/go"
 )
@@ -38,6 +41,35 @@ func main() {
 
 	flag.Parse()
 
+	if !devMode {
+		if _, err := os.Stat(os.Getenv("HOME") + "/FatesList/config/data/secrets.json"); errors.Is(err, os.ErrNotExist) {
+			panic("secrets.json not found")
+		}
+		file := os.Getenv("HOME") + "/FatesList/config/data/secrets.json"
+
+		// Read file
+		fileBytes, err := os.ReadFile(file)
+
+		if err != nil {
+			panic(err)
+		}
+
+		// Unmarshal using fastjson
+		var p fastjson.Parser
+
+		v, err := p.Parse(string(fileBytes))
+
+		if err != nil {
+			panic(err)
+		}
+
+		os.Setenv("SECRET_KEY", v.Get("metro_key").String())
+	} else {
+		os.Setenv("SECRET_KEY", "ABC")
+	}
+
+	os.Setenv("LIST_ID", "5800d395-beb3-4d79-90b9-93e1ca674b40")
+
 	pool, err := pgxpool.Connect(ctx, "")
 
 	if err != nil {
@@ -49,6 +81,8 @@ func main() {
 	if devMode {
 		api = "https://api.fateslist.xyz"
 	}
+
+	// Get required variables
 
 	r := mux.NewRouter()
 
