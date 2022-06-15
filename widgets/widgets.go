@@ -12,21 +12,17 @@ import (
 	"os"
 
 	"github.com/h2non/bimg"
-	"github.com/kolesa-team/go-webp/decoder"
-	"github.com/kolesa-team/go-webp/encoder"
-	"github.com/kolesa-team/go-webp/webp"
 
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/draw"
 	"golang.org/x/image/font"
 
+	"wv2/imgtools"
 	"wv2/types"
-	"wv2/utils"
 )
 
 var (
-	OptionsE *encoder.Options
 	listicon draw.Image
 	mainImg  draw.Image
 	fontD    *truetype.Font
@@ -91,13 +87,13 @@ func scaleImage(imgBuf []byte, width, height int) (image.Image, error) {
 		return nil, err
 	}
 
-	// Re-encode to webp
+	// Re-encode to PNG
 	buf := bytes.NewBuffer(resized)
-	webpBuf, err := webp.Decode(buf, &decoder.Options{})
+	pngData, err := png.Decode(buf)
 
 	// Convert to draw.Image
 
-	return webpBuf, nil
+	return pngData, nil
 }
 
 func copyImage(x, y int, img image.Image) {
@@ -147,13 +143,10 @@ func init() {
 
 	mainImg = image.NewRGBA(image.Rect(0, 0, 640, 480))
 
-	OptionsE, err = encoder.NewLosslessEncoderOptions(encoder.PresetDefault, 1)
-
 	if err != nil {
 		panic(err)
 	}
 
-	// Read listicon.webp from assets
 	f, err := os.Open("assets/listicon.png")
 
 	if err != nil {
@@ -175,6 +168,8 @@ func init() {
 
 func DrawWidget(bot types.WidgetUser) image.Image {
 	// Draw a 640x480 black rectangle first
+	fmt.Println("Starting draw")
+
 	draw.Draw(mainImg, mainImg.Bounds(), &image.Uniform{color.Black}, image.Point{}, draw.Src)
 
 	// textIndent is the amount of space to leave on the left of the screen. Negative because positive means reverse direction.
@@ -194,7 +189,7 @@ func DrawWidget(bot types.WidgetUser) image.Image {
 
 	// Resize avatar to 512x512
 	var w = bytes.NewBuffer([]byte{})
-	err := webp.Encode(w, avatarImgD, OptionsE)
+	err := png.Encode(w, avatarImgD)
 
 	if err == nil {
 		avatarImg, err = scaleImage(w.Bytes(), 128, 128)
@@ -208,10 +203,12 @@ func DrawWidget(bot types.WidgetUser) image.Image {
 
 	/* Now insert the avatar image into the main image.
 	To get the point we insert at, we first find center of main image and subtract X of that from X of avatar image */
-	copyImage(centeredImage(avatarImg), centeredImageY(avatarImg), utils.Circle(avatarImg))
+	copyImage(centeredImage(avatarImg), centeredImageY(avatarImg), imgtools.Circle(avatarImg))
 
 	// centeredImageY(avatarImg)+(getImageCenter(avatarImg).Y*2) means we add the center of the avatar image * 2 (to get diameter) to the center of the main image
 	addLabel(mainImg.(*image.RGBA), titleSize, centeredImage(avatarImg), centeredImageY(avatarImg)+(getImageCenter(avatarImg).Y*2), []string{bot.Username})
+
+	fmt.Println("Ending draw")
 
 	return mainImg
 }

@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
+	"image/png"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -11,7 +13,7 @@ import (
 
 	integrase "github.com/MetroReviews/metro-integrase/lib"
 	"github.com/gorilla/mux"
-	"github.com/kolesa-team/go-webp/webp"
+	"github.com/h2non/bimg"
 
 	jsoniter "github.com/json-iterator/go"
 )
@@ -79,7 +81,7 @@ func main() {
 
 		defer resp.Body.Close()
 
-		bytes, err := ioutil.ReadAll(resp.Body)
+		bytesD, err := ioutil.ReadAll(resp.Body)
 
 		if err != nil {
 			fmt.Println(err)
@@ -87,7 +89,7 @@ func main() {
 			w.Write([]byte(err.Error()))
 		}
 
-		err = json.Unmarshal(bytes, &user)
+		err = json.Unmarshal(bytesD, &user)
 
 		if err != nil {
 			fmt.Println(err)
@@ -113,11 +115,37 @@ func main() {
 
 		img := widgets.DrawWidget(widgetData)
 
-		w.Header().Set("Content-Type", "image/webp")
 		w.Header().Set("Cache-Control", "public, max-age=28800")
 		w.Header().Set("Expires", time.Now().Add(time.Hour*8).Format(http.TimeFormat))
 
-		err = webp.Encode(w, img, widgets.OptionsE)
+		tmpBuf := bytes.NewBuffer([]byte{})
+
+		err = png.Encode(tmpBuf, img)
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+
+		format := r.URL.Query().Get("format")
+
+		if format == "png" {
+			w.Header().Set("Content-Type", "image/png")
+			w.Write(tmpBuf.Bytes())
+		} else {
+			w.Header().Set("Content-Type", "image/webp")
+
+			bimgImg, err := bimg.NewImage(tmpBuf.Bytes()).Convert(bimg.WEBP)
+
+			if err != nil {
+				fmt.Println(err)
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(err.Error()))
+			}
+
+			w.Write(bimgImg)
+		}
 	})
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

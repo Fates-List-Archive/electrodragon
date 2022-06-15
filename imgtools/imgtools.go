@@ -1,5 +1,5 @@
 // https://goplay.space/#_RTH0rWA7Ae
-package utils
+package imgtools
 
 import (
 	"image"
@@ -8,9 +8,8 @@ import (
 )
 
 type circle struct {
-	centerPoint  image.Point
-	radius       int
-	transparents []image.Point
+	centerPoint image.Point
+	radius      int
 }
 
 func (c *circle) ColorModel() color.Model {

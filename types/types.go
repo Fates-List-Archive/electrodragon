@@ -4,14 +4,13 @@ import (
 	"bytes"
 	"fmt"
 	"image"
+	"image/png"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
-	"wv2/utils"
 
 	"github.com/h2non/bimg"
-	"golang.org/x/image/webp"
 )
 
 type WidgetUser struct {
@@ -60,16 +59,8 @@ func (w *WidgetUser) ParseData() error {
 
 	r := bytes.NewReader(imgBytes)
 
-	imgType, err := utils.GuessImageFormat(r)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("Guessed type:", imgType)
-
-	// Convert to webp using bimg
-	imgBytes, err = bimg.NewImage(imgBytes).Convert(bimg.WEBP)
+	// Convert to png using bimg
+	imgBytes, err = bimg.NewImage(imgBytes).Convert(bimg.PNG)
 
 	if err != nil {
 		return err
@@ -77,7 +68,7 @@ func (w *WidgetUser) ParseData() error {
 
 	r = bytes.NewReader(imgBytes)
 
-	avatar, err = webp.Decode(r)
+	avatar, err = png.Decode(r)
 
 	if err != nil {
 		return err
