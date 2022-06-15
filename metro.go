@@ -50,7 +50,7 @@ func (adp DummyAdapter) GetConfig() types.ListConfig {
 		RequestLogs: true,
 		StartupLogs: true,
 		BindAddr:    ":1800",
-		DomainName:  "https://electrodragon.fateslist.xyz",
+		DomainName:  "",
 	}
 }
 
