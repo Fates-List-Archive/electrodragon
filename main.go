@@ -63,7 +63,13 @@ func main() {
 			panic(err)
 		}
 
-		os.Setenv("SECRET_KEY", v.Get("metro_key").String())
+		key, err := v.Get("metro_key").StringBytes()
+
+		if err != nil {
+			panic(err)
+		}
+
+		os.Setenv("SECRET_KEY", string(key))
 	} else {
 		os.Setenv("SECRET_KEY", "ABC")
 	}
