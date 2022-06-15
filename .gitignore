@@ -1,2 +1,4 @@
 wv2
 utils/keygen_secure.go
+tmp/
+*.webp
