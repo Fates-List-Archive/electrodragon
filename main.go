@@ -431,6 +431,7 @@ func main() {
 		w.Write(bytes)
 	}))
 
+	// Staff verification endpoint
 	r.HandleFunc("/ap/newcat", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
 			w.Write([]byte(invalidMethod))
@@ -559,6 +560,7 @@ func main() {
 		json.NewEncoder(w).Encode(data)
 	}))
 
+	// QR code endpoint used by staff verify to show QR code to user
 	r.HandleFunc("/qr/{hash}", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" && r.Method != "HEAD" {
 			w.Write([]byte(invalidMethod))
@@ -582,6 +584,7 @@ func main() {
 		w.Write([]byte(img))
 	})
 
+	// Staff login endpoint (for admin panel)
 	r.HandleFunc("/ap/pouncecat", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
 			w.Write([]byte(invalidMethod))
@@ -642,6 +645,33 @@ func main() {
 		redisPool.Set(ctx, session, bytes, time.Hour*2)
 
 		w.Write([]byte(session))
+	}))
+
+	r.HandleFunc("/ap/shadowsight", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
+		auth, err := utils.AuthorizeUser(utils.AuthRequest{
+			UserID:   r.URL.Query().Get("user_id"),
+			Token:    r.Header.Get("Authorization"),
+			TOTP:     r.Header.Get("Frostpaw-MFA"),
+			Password: r.Header.Get("Frostpaw-Pass"),
+			DevMode:  devMode,
+			Context:  ctx,
+			DB:       pool,
+		})
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		if auth.Perms.Perm < 2 {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("You do not have permission to do this"))
+			return
+		}
+
+		w.Write([]byte("OK"))
 	}))
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -13,6 +13,7 @@ import (
 	"unsafe"
 
 	"github.com/alexedwards/argon2id"
+	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jmoiron/sqlx"
 	jsoniter "github.com/json-iterator/go"
@@ -252,12 +253,9 @@ func GetPermissions(devMode bool, userID string) (*UserPerms, error) {
 	return &perms, nil
 }
 
-func allowedTables(devMode bool, userID string, perms UserPerms) []string {
-	if perms.Perm < 5 {
-		return []string{"reviews", "review_votes", "bot_packs", "vanity", "leave_of_absence", "user_vote_table",
-			"lynx_surveys", "lynx_survey_responses"}
-	}
-	return []string{}
+type sessionStruct struct {
+	ID    string `json:"user_id"`
+	Token string `json:"token"`
 }
 
 type AuthRequest struct {
@@ -267,7 +265,10 @@ type AuthRequest struct {
 	// User API token
 	Token string
 
-	// User Password (only in login)
+	// Session ID (after login for some extra secure endpoints)
+	SessionID string
+
+	// User Password
 	Password string
 
 	// 2FA code
@@ -281,6 +282,9 @@ type AuthRequest struct {
 
 	// The pgx database used
 	DB *pgxpool.Pool
+
+	// Redis client (requied for session ID)
+	Redis *redis.Client
 }
 
 type authResponse struct {
@@ -293,11 +297,14 @@ type authResponse struct {
 	// If the user is MFA key verified or not
 	MFA bool
 
-	// If the user has logged in with a password
+	// If the user has logged in with a password successfully
 	PasswordLogin bool
 
 	// The allowed tables of the user, empty slice if all are allowed
 	AllowedTables []string
+
+	// Whether or not the users session was validated or not
+	SessionValidated bool
 }
 
 // Helper function to authenticate a user
@@ -377,12 +384,49 @@ func AuthorizeUser(req AuthRequest) (*authResponse, error) {
 		}
 	}
 
+	// SessionValidated is true if the session was validated
+	var sessionValidated bool
+
+	if req.SessionID != "" {
+		// Check session in redis
+		var session = req.Redis.Get(req.Context, req.SessionID).Val()
+
+		if session != "" {
+			// JSON parse it (or try to)
+			var sessionData sessionStruct
+
+			err := json.Unmarshal([]byte(session), &sessionData)
+
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				if sessionData.ID != req.UserID {
+					return nil, errors.New("invalid session")
+				} else {
+					// Check token with the token that was in auth request (that was also validated)
+					if sessionData.Token != req.Token {
+						return nil, errors.New("invalid session")
+					}
+					sessionValidated = true
+				}
+			}
+		}
+	}
+
+	allowedTokens := []string{}
+
+	if perms.Perm < 5 {
+		allowedTokens = []string{"reviews", "review_votes", "bot_packs", "vanity", "leave_of_absence", "user_vote_table",
+			"lynx_surveys", "lynx_survey_responses"}
+	}
+
 	resp := &authResponse{
-		Perms:         *perms,
-		Verified:      verified,
-		MFA:           mfa,
-		AllowedTables: allowedTables(req.DevMode, req.UserID, *perms),
-		PasswordLogin: passAuth,
+		Perms:            *perms,
+		Verified:         verified,
+		MFA:              mfa,
+		AllowedTables:    allowedTokens,
+		PasswordLogin:    passAuth,
+		SessionValidated: sessionValidated,
 	}
 
 	return resp, nil
