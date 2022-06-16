@@ -358,6 +358,8 @@ func AuthorizeUser(req AuthRequest) (*authResponse, error) {
 		mfa = true
 	}
 
+	fmt.Println(totpKey, req.TOTP, mfa)
+
 	// Check password
 	var passAuth bool
 
@@ -369,7 +371,7 @@ func AuthorizeUser(req AuthRequest) (*authResponse, error) {
 		req.DB.QueryRow(req.Context, "SELECT staff_password FROM users WHERE user_id = $1", req.UserID).Scan(&password)
 
 		if password != "" {
-			if match, err := argon2id.ComparePasswordAndHash(password, req.Password); err == nil && match {
+			if match, err := argon2id.ComparePasswordAndHash(req.Password, password); err == nil && match {
 				passAuth = true
 			}
 		}

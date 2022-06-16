@@ -20,6 +20,7 @@ import (
 	"wv2/widgets"
 
 	integrase "github.com/MetroReviews/metro-integrase/lib"
+	"github.com/alexedwards/argon2id"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
@@ -503,7 +504,16 @@ func main() {
 
 		newPass := xkcdpass.GenerateWithLength(6)
 
-		_, err = pool.Exec(ctx, "UPDATE users SET staff_verify_code = $1, staff_password = $2 WHERE user_id = $3", body, newPass, r.URL.Query().Get("user_id"))
+		newPassHashed, err := argon2id.CreateHash(newPass, argon2id.DefaultParams)
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(internalError))
+			return
+		}
+
+		_, err = pool.Exec(ctx, "UPDATE users SET staff_verify_code = $1, staff_password = $2 WHERE user_id = $3", body, newPassHashed, r.URL.Query().Get("user_id"))
 
 		if err != nil {
 			fmt.Println(err)
