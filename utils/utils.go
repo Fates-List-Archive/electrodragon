@@ -5,15 +5,17 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"reflect"
 	"strings"
 	"time"
+	"unsafe"
 
-	jsoniter "github.com/json-iterator/go"
-
+	"github.com/alexedwards/argon2id"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jmoiron/sqlx"
+	jsoniter "github.com/json-iterator/go"
 	_ "github.com/lib/pq"
 	"github.com/pquerna/otp/totp"
 )
@@ -265,6 +267,9 @@ type AuthRequest struct {
 	// User API token
 	Token string
 
+	// User Password (only in login)
+	Password string
+
 	// 2FA code
 	TOTP string
 
@@ -282,11 +287,14 @@ type authResponse struct {
 	// The users permissions
 	Perms UserPerms
 
-	// If the user is not staff verified, this will be set to true
+	// If the user is staff verified, this will be set to true
 	Verified bool
 
 	// If the user is MFA key verified or not
 	MFA bool
+
+	// If the user has logged in with a password
+	PasswordLogin bool
 
 	// The allowed tables of the user, empty slice if all are allowed
 	AllowedTables []string
@@ -335,9 +343,9 @@ func AuthorizeUser(req AuthRequest) (*authResponse, error) {
 	var verified bool
 
 	if req.DevMode {
-		verified = checkCodeDev(req.UserID, staffVerifyCode)
+		verified = CheckCodeDev(req.UserID, staffVerifyCode)
 	} else {
-		verified = checkCodeSecure(req.UserID, staffVerifyCode)
+		verified = CheckCodeSecure(req.UserID, staffVerifyCode)
 	}
 
 	// Check MFA
@@ -350,11 +358,29 @@ func AuthorizeUser(req AuthRequest) (*authResponse, error) {
 		mfa = true
 	}
 
+	// Check password
+	var passAuth bool
+
+	if req.Password != "" {
+		// Get argon2 password from DB
+
+		var password string
+
+		req.DB.QueryRow(req.Context, "SELECT staff_password FROM users WHERE user_id = $1", req.UserID).Scan(&password)
+
+		if password != "" {
+			if match, err := argon2id.ComparePasswordAndHash(password, req.Password); err == nil && match {
+				passAuth = true
+			}
+		}
+	}
+
 	resp := &authResponse{
 		Perms:         *perms,
 		Verified:      verified,
 		MFA:           mfa,
 		AllowedTables: allowedTables(req.DevMode, req.UserID, *perms),
+		PasswordLogin: passAuth,
 	}
 
 	return resp, nil
@@ -366,7 +392,7 @@ func CorsWrap(fn HFunc) HFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, PATCH, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Frostpaw-ID, Frostpaw-MFA, Authorization")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Frostpaw-ID, Frostpaw-MFA, Authorization, Frostpaw-Pass")
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		if r.Method == "OPTIONS" {
 			w.Write([]byte(""))
@@ -374,4 +400,32 @@ func CorsWrap(fn HFunc) HFunc {
 		}
 		fn(w, r)
 	}
+}
+
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const (
+	letterIdxBits = 6                    // 6 bits to represent a letter index
+	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+)
+
+// https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go
+func RandString(n int) string {
+	var src = rand.NewSource(time.Now().UnixNano())
+
+	b := make([]byte, n)
+	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
+	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = src.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			b[i] = letterBytes[idx]
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
+
+	return *(*string)(unsafe.Pointer(&b))
 }

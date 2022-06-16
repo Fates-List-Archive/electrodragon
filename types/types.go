@@ -111,3 +111,11 @@ type Doc struct {
 	MD string `json:"data"`
 	JS string `json:"js"`
 }
+
+type NewStaff struct {
+	Pass      string `json:"pass"`
+	SharedKey string `json:"totp_shared_key"`
+
+	// TOTP image hex
+	Image string `json:"image"`
+}

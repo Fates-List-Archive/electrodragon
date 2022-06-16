@@ -167,6 +167,7 @@ Gets a user profile.
 
 
 
+		- **verified** => bool [ex false]
 
 
 
@@ -228,7 +229,8 @@ Gets a user profile.
                     "avatar": "",
                     "bot": false,
                     "status": "Unknown"
-                }
+                },
+                "verified": false
             },
             "expires_on": "1970-01-01T00:00:00Z",
             "repeats": 0

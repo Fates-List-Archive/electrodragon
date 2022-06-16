@@ -269,7 +269,7 @@ also match the user token sent in the ``Authorization`` header
 
 - **epoch** => (Array) 
 - **replies** => (Array) 
-- **parent_id** => (Optional) string [ex "cca11ac3-9291-4a95-a070-008d08081e6f"]
+- **parent_id** => (Optional) string [ex "bebcf5f9-78be-44e0-a285-9334c4bdfb6c"]
 
 
 
@@ -295,7 +295,7 @@ also match the user token sent in the ``Authorization`` header
     },
     "epoch": [],
     "replies": [],
-    "parent_id": "cca11ac3-9291-4a95-a070-008d08081e6f"
+    "parent_id": "bebcf5f9-78be-44e0-a285-9334c4bdfb6c"
 }
 ```
 
@@ -362,7 +362,7 @@ also match the user token sent in the ``Authorization`` header
 
 **Request Body**
 
-- **id** => (Optional) string [ex "221fe6f5-8251-41c6-8387-10fec8542b4d"]
+- **id** => (Optional) string [ex "878f549d-65d5-487e-b9c4-258a734d11ca"]
 - **star_rating** => string [ex "0"]
 - **review_text** => string [ex ""]
 - **votes** => Struct ParsedReviewVotes 
@@ -392,7 +392,7 @@ also match the user token sent in the ``Authorization`` header
 
 ```json
 {
-    "id": "221fe6f5-8251-41c6-8387-10fec8542b4d",
+    "id": "878f549d-65d5-487e-b9c4-258a734d11ca",
     "star_rating": "0",
     "review_text": "",
     "votes": {
@@ -465,7 +465,7 @@ set this anyways so you might as well set it correctly.
 
 **Path Parameters**
 
-- **rid** => string [ex "6a56cdb4-be60-44a5-82a3-14ce6f215804"]
+- **rid** => string [ex "e628eed4-56e4-4f6b-b670-21d512e031a7"]
 
 
 
@@ -515,7 +515,7 @@ in the future.
 
 **Path Parameters**
 
-- **rid** => string [ex "b3a3c4fc-38e5-466d-ae45-0f581a998955"]
+- **rid** => string [ex "28b5f234-9aa4-469d-9e16-8bfcf8af79c4"]
 
 
 

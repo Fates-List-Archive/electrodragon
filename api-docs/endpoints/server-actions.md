@@ -199,7 +199,7 @@ def random_server():
 
 
 - **flags** => (Array) 
-- **created_at** => string [ex "2022-06-15T17:46:32.214156829Z"]
+- **created_at** => string [ex "2022-06-16T11:30:14.658141380Z"]
 
 
 
@@ -221,7 +221,7 @@ def random_server():
         "status": "Unknown"
     },
     "flags": [],
-    "created_at": "2022-06-15T17:46:32.214156829Z"
+    "created_at": "2022-06-16T11:30:14.658141380Z"
 }
 ```
 

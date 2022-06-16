@@ -110,6 +110,7 @@ Returns the Frostpaw client with the given ID.
 
 
 
+- **verified** => bool [ex false]
 
 
 
@@ -128,7 +129,8 @@ Returns the Frostpaw client with the given ID.
         "avatar": "",
         "bot": false,
         "status": "Unknown"
-    }
+    },
+    "verified": false
 }
 ```
 
