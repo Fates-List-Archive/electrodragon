@@ -15,9 +15,9 @@ import (
 	"github.com/alexedwards/argon2id"
 	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v5/pgxpool"
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 	jsoniter "github.com/json-iterator/go"
-	_ "github.com/lib/pq"
 	"github.com/pquerna/otp/totp"
 )
 
@@ -76,7 +76,7 @@ func IsSecret(tableName, columnName string) bool {
 
 func ConnectToDBIf() error {
 	if sqlxPool == nil {
-		db, err := sqlx.Connect("postgres", "sslmode=disable")
+		db, err := sqlx.Connect("pgx", "sslmode=disable")
 		if err != nil {
 			return err
 		}
