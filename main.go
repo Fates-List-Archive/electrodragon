@@ -517,7 +517,7 @@ func main() {
 
 		imgHash := utils.RandString(512)
 
-		imgQr, err := newTotp.Image(256, 256)
+		imgQr, err := newTotp.Image(150, 150)
 
 		if err != nil {
 			fmt.Println(err)
