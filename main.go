@@ -655,6 +655,7 @@ func main() {
 			DevMode:   devMode,
 			Context:   ctx,
 			DB:        pool,
+			Redis:     redisPool,
 		})
 
 		if err != nil {
