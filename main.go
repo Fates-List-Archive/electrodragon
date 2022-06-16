@@ -649,13 +649,12 @@ func main() {
 
 	r.HandleFunc("/ap/shadowsight", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
 		auth, err := utils.AuthorizeUser(utils.AuthRequest{
-			UserID:   r.URL.Query().Get("user_id"),
-			Token:    r.Header.Get("Authorization"),
-			TOTP:     r.Header.Get("Frostpaw-MFA"),
-			Password: r.Header.Get("Frostpaw-Pass"),
-			DevMode:  devMode,
-			Context:  ctx,
-			DB:       pool,
+			UserID:    r.URL.Query().Get("user_id"),
+			Token:     r.Header.Get("Authorization"),
+			SessionID: r.Header.Get("Frostpaw-ID"),
+			DevMode:   devMode,
+			Context:   ctx,
+			DB:        pool,
 		})
 
 		if err != nil {
@@ -665,7 +664,7 @@ func main() {
 			return
 		}
 
-		if auth.Perms.Perm < 2 {
+		if auth.Perms.Perm < 2 || !auth.SessionValidated {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("You do not have permission to do this"))
 			return
