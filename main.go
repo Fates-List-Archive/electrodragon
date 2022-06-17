@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 	"wv2/types"
@@ -25,6 +26,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
 	"github.com/h2non/bimg"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/pquerna/otp/totp"
 	"github.com/valyala/fastjson"
@@ -608,6 +610,12 @@ func main() {
 			return
 		}
 
+		if !auth.Verified {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("You have not completed staff verification yet"))
+			return
+		}
+
 		if !auth.PasswordLogin {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Password incorrect. Retry staff verification if you have not done it before"))
@@ -672,6 +680,268 @@ func main() {
 		}
 
 		w.Write([]byte("OK"))
+	}))
+
+	// Accepts the following parameters
+	// - user_id -> The user ID
+	// - limit -> The number of results to return
+	// - offset -> The number of results to skip
+	// - search_by -> The field to search by
+	// - search_val -> The value to search for
+	// - count -> Whether to return the total number of results or the results themselves
+	r.HandleFunc("/ap/tables/{table_name}", utils.CorsWrap(func(w http.ResponseWriter, r *http.Request) {
+		auth, err := utils.AuthorizeUser(utils.AuthRequest{
+			UserID:    r.URL.Query().Get("user_id"),
+			Token:     r.Header.Get("Authorization"),
+			SessionID: r.Header.Get("Frostpaw-ID"),
+			DevMode:   devMode,
+			Context:   ctx,
+			DB:        pool,
+			Redis:     redisPool,
+		})
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		if auth.Perms.Perm < 2 || !auth.SessionValidated {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("You do not have permission to do this"))
+			return
+		}
+
+		tableName := mux.Vars(r)["table_name"]
+
+		if len(auth.AllowedTables) > 0 {
+			// We have a limitation on allowed tables, check if the table is allowed
+			var allowedTable bool
+
+			for _, table := range auth.AllowedTables {
+				if table == tableName {
+					allowedTable = true
+					break
+				}
+			}
+
+			if !allowedTable {
+				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte("You do not have permission to do this"))
+				return
+			}
+		}
+
+		// Get schema
+		schema, err := utils.GetSchema(ctx, pool, utils.SchemaFilter{
+			TableName: tableName,
+		})
+
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(internalError))
+			return
+		}
+
+		if len(schema) == 0 {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte("This table does not exist"))
+			return
+		}
+
+		countStr := r.URL.Query().Get("count")
+
+		count := (countStr == "true" || countStr == "1")
+
+		var limit int64 = -1
+		var offset int64 = -1
+
+		if !count {
+			limit, _ = strconv.ParseInt(r.URL.Query().Get("limit"), 10, 64)
+			offset, _ = strconv.ParseInt(r.URL.Query().Get("offset"), 10, 64)
+			limit = utils.Min(utils.Max(limit, 50), 50)
+			offset = utils.Max(offset, 0)
+		}
+
+		fmt.Println(limit, offset)
+
+		searchBy := r.URL.Query().Get("search_by")
+		searchVal := r.URL.Query().Get("search_val")
+		limitN := "2"  // Limit number
+		offsetN := "3" // Offset number
+
+		parseSql := func(sql string) (pgx.Rows, error) {
+			if count {
+				fmt.Println("Counting", sql)
+
+				if offsetN == "2" {
+					return pool.Query(ctx, strings.Replace(sql, "SELECT *", "SELECT COUNT(*)", 1))
+				}
+
+				return pool.Query(ctx, strings.Replace(sql, "SELECT *", "SELECT COUNT(*)", 1), searchVal)
+			}
+
+			if offsetN == "2" {
+				return pool.Query(ctx, sql+" LIMIT $"+limitN+" OFFSET $"+offsetN, limit, offset)
+			}
+
+			return pool.Query(ctx, sql+" LIMIT $"+limitN+" OFFSET $"+offsetN, searchVal, limit, offset)
+		}
+
+		// Normal case (no search val or search by)
+
+		var cols pgx.Rows
+
+		if searchBy == "" || searchVal == "" {
+			limitN, offsetN = "1", "2"
+			cols, err = parseSql("SELECT * FROM " + tableName)
+
+			if err != nil {
+				fmt.Println(err)
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(internalError))
+				return
+			}
+		} else {
+			// Make sure the searchBy column is in the schema
+			var found bool
+
+			for _, col := range schema {
+				if col.ColumnName == searchBy && !col.Secret {
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write([]byte("The search_by column does not exist"))
+				return
+			}
+
+			// Handle all searchVal cases
+			if searchVal == "null" {
+				limitN, offsetN = "1", "2"
+				cols, err = parseSql("SELECT * FROM " + tableName + " WHERE " + searchBy + "::text IS NULL")
+			} else if strings.HasPrefix(searchVal, ">") {
+				searchVal = strings.TrimPrefix(searchVal, ">")
+				cols, err = parseSql("SELECT * FROM " + tableName + " WHERE " + searchBy + "::text > $1")
+			} else if strings.HasPrefix(searchVal, "<") {
+				searchVal = strings.TrimPrefix(searchVal, "<")
+				cols, err = parseSql("SELECT * FROM " + tableName + " WHERE " + searchBy + "::text < $1")
+			} else if strings.HasPrefix(searchVal, ">=") {
+				searchVal = strings.TrimPrefix(searchVal, ">=")
+				cols, err = parseSql("SELECT * FROM " + tableName + " WHERE " + searchBy + "::text >= $1")
+			} else if strings.HasPrefix(searchVal, "<=") {
+				searchVal = strings.TrimPrefix(searchVal, "<=")
+				cols, err = parseSql("SELECT * FROM " + tableName + " WHERE " + searchBy + "::text <= $1")
+			} else if strings.HasPrefix(searchVal, "!=") {
+				searchVal = strings.TrimPrefix(searchVal, "!=")
+				cols, err = parseSql("SELECT * FROM " + tableName + " WHERE " + searchBy + "::text != $1")
+			} else if strings.HasPrefix(searchVal, "=") {
+				searchVal = strings.TrimPrefix(searchVal, "=")
+				cols, err = parseSql("SELECT * FROM " + tableName + " WHERE " + searchBy + "::text = $1")
+			} else {
+				searchVal = "%" + strings.TrimPrefix(searchVal, "@") + "%"
+				cols, err = parseSql("SELECT * FROM " + tableName + " WHERE " + searchBy + "::text ILIKE $1")
+			}
+
+			if err != nil {
+				fmt.Println(err)
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(internalError))
+				return
+			}
+		}
+
+		if cols == nil {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte("Something happened?"))
+			return
+		}
+
+		defer cols.Close()
+
+		if count {
+			var count int64
+			cols.Next()
+			err = cols.Scan(&count)
+			if err != nil {
+				fmt.Println(err)
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(internalError))
+				return
+			}
+
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(strconv.FormatInt(count, 10)))
+			return
+		}
+
+		var rows []map[string]any
+
+		var fieldDescrs = cols.FieldDescriptions()
+
+		var colData []string = make([]string, len(fieldDescrs))
+
+		for i, fieldDescr := range fieldDescrs {
+			colData[i] = string(fieldDescr.Name)
+		}
+
+		fmt.Println(colData)
+
+		for cols.Next() {
+			var row map[string]any = make(map[string]any)
+
+			vals, err := cols.Values()
+
+			if err != nil {
+				fmt.Println(err)
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(internalError))
+				return
+			}
+
+			for i, val := range vals {
+				if valD, ok := val.([16]uint8); ok {
+					val = fmt.Sprintf("%x-%x-%x-%x-%x", valD[0:4], valD[4:6], valD[6:8], valD[8:10], valD[10:16])
+				}
+
+				if valD, ok := val.(map[string]any); ok {
+					valla, err := json.Marshal(valD)
+
+					if err != nil {
+						fmt.Println(err)
+						w.WriteHeader(http.StatusInternalServerError)
+						w.Write([]byte(internalError))
+						return
+					}
+
+					val = string(valla)
+				}
+
+				row[colData[i]] = val
+			}
+
+			// Remove out secret columns
+			for _, col := range schema {
+				if col.Secret {
+					delete(row, col.ColumnName)
+				}
+			}
+
+			rows = append(rows, row)
+		}
+
+		if len(rows) == 0 {
+			w.Write([]byte("[]"))
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(rows)
 	}))
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

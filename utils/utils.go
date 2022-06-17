@@ -19,11 +19,13 @@ import (
 	"github.com/jmoiron/sqlx"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/pquerna/otp/totp"
+
+	"golang.org/x/exp/constraints"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
-var sqlxPool *sqlx.DB
+var SqlxPool *sqlx.DB
 
 type Schema struct {
 	TableName  string  `json:"table_name"`
@@ -75,13 +77,13 @@ func IsSecret(tableName, columnName string) bool {
 }
 
 func ConnectToDBIf() error {
-	if sqlxPool == nil {
+	if SqlxPool == nil {
 		db, err := sqlx.Connect("pgx", "sslmode=disable")
 		if err != nil {
 			return err
 		}
 
-		sqlxPool = db
+		SqlxPool = db
 	}
 	return nil
 }
@@ -108,14 +110,14 @@ func GetSchema(ctx context.Context, pool *pgxpool.Pool, opts SchemaFilter) ([]Sc
 = (e.object_catalog, e.object_schema, e.object_name, e.object_type, e.collection_type_identifier))
 WHERE table_schema = 'public' order by table_name, ordinal_position
 `
-	if sqlxPool == nil {
+	if SqlxPool == nil {
 		err := ConnectToDBIf()
 		if err != nil {
 			panic(err)
 		}
 	}
 
-	rows, err := sqlxPool.Queryx(sqlString)
+	rows, err := SqlxPool.Queryx(sqlString)
 
 	if err != nil {
 		return nil, err
@@ -180,10 +182,10 @@ WHERE table_schema = 'public' order by table_name, ordinal_position
 		}
 
 		// Now check if the column is tagged properly
-		if _, err := sqlxPool.Queryx("SELECT _lynxtag FROM" + data.TableName); err != nil {
+		if _, err := SqlxPool.Queryx("SELECT _lynxtag FROM" + data.TableName); err != nil {
 			if err == sql.ErrNoRows {
 				fmt.Println("Tagging", data.TableName)
-				_, err := sqlxPool.Exec("ALTER TABLE " + data.TableName + " ADD COLUMN _lynxtag uuid not null unique default uuid_generate_v4()")
+				_, err := SqlxPool.Exec("ALTER TABLE " + data.TableName + " ADD COLUMN _lynxtag uuid not null unique default uuid_generate_v4()")
 				if err != nil {
 					return nil, err
 				}
@@ -474,4 +476,18 @@ func RandString(n int) string {
 	}
 
 	return *(*string)(unsafe.Pointer(&b))
+}
+
+func Min[T constraints.Ordered](a, b T) T {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func Max[T constraints.Ordered](a, b T) T {
+	if a > b {
+		return a
+	}
+	return b
 }
