@@ -2,6 +2,7 @@ package types
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"image"
 	"image/color"
@@ -10,8 +11,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/bwmarrin/discordgo"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang/freetype/truetype"
 	"github.com/h2non/bimg"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type WidgetOptions struct {
@@ -118,4 +122,29 @@ type NewStaff struct {
 
 	// TOTP image hex
 	Image string `json:"image"`
+}
+
+type RouteInfo struct {
+	// Postgres database
+	DB *pgxpool.Pool
+
+	// Redis
+	Redis *redis.Client
+
+	// Devmode or not
+	DevMode bool
+
+	// Context
+	Context context.Context
+
+	// Main Server
+	MainServer string
+
+	// Staff Server
+	StaffServer string
+
+	// Discordgo bot
+	Bot *discordgo.Session
+
+	APIUrl string
 }

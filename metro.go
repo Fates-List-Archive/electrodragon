@@ -7,12 +7,9 @@ import (
 
 	"github.com/MetroReviews/metro-integrase/types"
 	log "github.com/sirupsen/logrus"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 var regex *regexp.Regexp
-var metro *discordgo.Session
 
 func init() {
 	var err error
