@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"wv2/routes"
 
 	"github.com/gorilla/mux"
@@ -34,11 +33,4 @@ func loadRoutes(r *mux.Router) {
 	r.HandleFunc("/ap/shadowsight", Route(routes.AdminCheckSessionValid))
 
 	r.HandleFunc("/ap/tables/{table_name}", Route(routes.AdminGetTable))
-
-	// The endpoint that handles 404s
-	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(notFoundPage))
-	})
 }

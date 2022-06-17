@@ -19,12 +19,6 @@ import (
 	"github.com/valyala/fastjson"
 )
 
-const (
-	notFoundPage  = "Not Found"
-	internalError = "Something went wrong"
-	invalidMethod = "Invalid method"
-)
-
 var (
 	ctx         = context.Background()
 	devMode     bool
