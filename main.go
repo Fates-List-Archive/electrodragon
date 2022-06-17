@@ -880,7 +880,7 @@ func main() {
 			return
 		}
 
-		var rows []map[string]any
+		var rows []map[string]any = []map[string]any{}
 
 		var fieldDescrs = cols.FieldDescriptions()
 
@@ -922,6 +922,12 @@ func main() {
 					val = string(valla)
 				}
 
+				if valD, ok := val.(int64); ok {
+					if valD > 9007199254740914 {
+						val = strconv.FormatInt(valD, 10)
+					}
+				}
+
 				row[colData[i]] = val
 			}
 
@@ -934,12 +940,7 @@ func main() {
 
 			rows = append(rows, row)
 		}
-
-		if len(rows) == 0 {
-			w.Write([]byte("[]"))
-			return
-		}
-
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(rows)
 	}))
