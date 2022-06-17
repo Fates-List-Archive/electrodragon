@@ -14,9 +14,8 @@ import (
 
 	"github.com/alexedwards/argon2id"
 	"github.com/go-redis/redis/v8"
+	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
-	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/jmoiron/sqlx"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/pquerna/otp/totp"
 
@@ -24,8 +23,6 @@ import (
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
-
-var SqlxPool *sqlx.DB
 
 type Schema struct {
 	TableName  string  `json:"table_name"`
@@ -76,21 +73,8 @@ func IsSecret(tableName, columnName string) bool {
 	return false
 }
 
-func ConnectToDBIf() error {
-	if SqlxPool == nil {
-		db, err := sqlx.Connect("pgx", "sslmode=disable")
-		if err != nil {
-			return err
-		}
-
-		SqlxPool = db
-	}
-	return nil
-}
-
 type schemaData struct {
 	ColumnDefault *string `db:"column_default"`
-	TableSchema   string  `db:"table_schema"`
 	TableName     string  `db:"table_name"`
 	ColumnName    string  `db:"column_name"`
 	DataType      string  `db:"data_type"`
@@ -110,38 +94,60 @@ func GetSchema(ctx context.Context, pool *pgxpool.Pool, opts SchemaFilter) ([]Sc
 = (e.object_catalog, e.object_schema, e.object_name, e.object_type, e.collection_type_identifier))
 WHERE table_schema = 'public' order by table_name, ordinal_position
 `
-	if SqlxPool == nil {
-		err := ConnectToDBIf()
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	rows, err := SqlxPool.Queryx(sqlString)
+	rows, err := pool.Query(ctx, sqlString)
 
 	if err != nil {
 		return nil, err
 	}
-
-	cols, err := rows.Columns()
-
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println(cols)
 
 	var result []Schema
+
+	finfo := rows.FieldDescriptions()
 
 	for rows.Next() {
 		var schema Schema
 
-		var data schemaData
-		err = rows.StructScan(&data)
+		data := schemaData{}
+
+		vals, err := rows.Values()
 
 		if err != nil {
 			fmt.Println(err)
 			return nil, err
+		}
+
+		// Loop over values and set inside struct
+		for i, key := range finfo {
+			if vals[i] == nil {
+				continue // Ignore nil fields
+			}
+
+			switch string(key.Name) {
+			case "column_default":
+				if val, ok := vals[i].(string); ok {
+					data.ColumnDefault = &val
+				}
+			case "table_name":
+				if val, ok := vals[i].(string); ok {
+					data.TableName = val
+				}
+			case "column_name":
+				if val, ok := vals[i].(string); ok {
+					data.ColumnName = val
+				}
+			case "data_type":
+				if val, ok := vals[i].(string); ok {
+					data.DataType = val
+				}
+			case "element_type":
+				if val, ok := vals[i].(string); ok {
+					data.ElementType = &val
+				}
+			case "is_nullable":
+				if val, ok := vals[i].(string); ok {
+					data.IsNullable = val
+				}
+			}
 		}
 
 		if opts.TableName != "" && opts.TableName != data.TableName {
@@ -182,10 +188,11 @@ WHERE table_schema = 'public' order by table_name, ordinal_position
 		}
 
 		// Now check if the column is tagged properly
-		if _, err := SqlxPool.Queryx("SELECT _lynxtag FROM" + data.TableName); err != nil {
+		var tag pgtype.UUID
+		if err := pool.QueryRow(ctx, "SELECT _lynxtag FROM"+data.TableName).Scan(&tag); err != nil {
 			if err == sql.ErrNoRows {
 				fmt.Println("Tagging", data.TableName)
-				_, err := SqlxPool.Exec("ALTER TABLE " + data.TableName + " ADD COLUMN _lynxtag uuid not null unique default uuid_generate_v4()")
+				_, err := pool.Exec(ctx, "ALTER TABLE "+data.TableName+" ADD COLUMN _lynxtag uuid not null unique default uuid_generate_v4()")
 				if err != nil {
 					return nil, err
 				}
