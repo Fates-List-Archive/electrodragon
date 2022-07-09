@@ -109,6 +109,7 @@ The flags of the user (such as vote privacy)
 | **VotesPrivate** | 1 |
 | **Staff** | 2 |
 | **AvidVoter** | 3 |
+| **Premium** | 4 |
 
 
     

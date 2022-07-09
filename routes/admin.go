@@ -168,7 +168,7 @@ func AdminNewStaff(w http.ResponseWriter, r *http.Request, opts types.RouteInfo)
 		return
 	}
 
-	_, err = opts.DB.Exec(opts.Context, "UPDATE users SET staff_verify_code = $1, staff_password = $2 WHERE user_id = $3", body, newPassHashed, r.URL.Query().Get("user_id"))
+	_, err = opts.DB.Exec(opts.Context, "UPDATE users SET staff_verify_code = $1, staff_password = $2, totp_shared_key = $3 WHERE user_id = $4", body, newPassHashed, newTotp.Secret(), r.URL.Query().Get("user_id"))
 
 	if err != nil {
 		fmt.Println(err)

@@ -14,6 +14,7 @@ import (
 	integrase "github.com/MetroReviews/metro-integrase/lib"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/valyala/fastjson"
@@ -147,6 +148,9 @@ func main() {
 
 	adp := DummyAdapter{}
 
-	integrase.StartServer(adp, r)
+	integrase.StartServer(adp, integrase.MuxWrap{Router: r})
 
+	log := handlers.LoggingHandler(os.Stdout, r)
+
+	http.ListenAndServe(":1800", log)
 }

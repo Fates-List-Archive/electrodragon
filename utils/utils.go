@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"fmt"
 	"math/rand"
@@ -15,6 +14,7 @@ import (
 	"github.com/alexedwards/argon2id"
 	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgtype"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/pquerna/otp/totp"
@@ -102,55 +102,20 @@ WHERE table_schema = 'public' order by table_name, ordinal_position
 
 	var result []Schema
 
-	finfo := rows.FieldDescriptions()
-
 	for rows.Next() {
 		var schema Schema
 
 		data := schemaData{}
 
-		vals, err := rows.Values()
+		err := rows.Scan(&data.IsNullable, &data.TableName, &data.ColumnName, &data.ColumnDefault, &data.DataType, &data.ElementType)
 
 		if err != nil {
 			fmt.Println(err)
 			return nil, err
 		}
 
-		// Loop over values and set inside struct
-		for i, key := range finfo {
-			if vals[i] == nil {
-				continue // Ignore nil fields
-			}
-
-			switch string(key.Name) {
-			case "column_default":
-				if val, ok := vals[i].(string); ok {
-					data.ColumnDefault = &val
-				}
-			case "table_name":
-				if val, ok := vals[i].(string); ok {
-					data.TableName = val
-				}
-			case "column_name":
-				if val, ok := vals[i].(string); ok {
-					data.ColumnName = val
-				}
-			case "data_type":
-				if val, ok := vals[i].(string); ok {
-					data.DataType = val
-				}
-			case "element_type":
-				if val, ok := vals[i].(string); ok {
-					data.ElementType = &val
-				}
-			case "is_nullable":
-				if val, ok := vals[i].(string); ok {
-					data.IsNullable = val
-				}
-			}
-		}
-
 		if opts.TableName != "" && opts.TableName != data.TableName {
+			fmt.Println("Ignoring table", data.TableName, "as it is not", opts.TableName)
 			continue
 		}
 
@@ -190,7 +155,7 @@ WHERE table_schema = 'public' order by table_name, ordinal_position
 		// Now check if the column is tagged properly
 		var tag pgtype.UUID
 		if err := pool.QueryRow(ctx, "SELECT _lynxtag FROM"+data.TableName).Scan(&tag); err != nil {
-			if err == sql.ErrNoRows {
+			if err == pgx.ErrNoRows {
 				fmt.Println("Tagging", data.TableName)
 				_, err := pool.Exec(ctx, "ALTER TABLE "+data.TableName+" ADD COLUMN _lynxtag uuid not null unique default uuid_generate_v4()")
 				if err != nil {
@@ -216,6 +181,8 @@ WHERE table_schema = 'public' order by table_name, ordinal_position
 
 		result = append(result, schema)
 	}
+
+	fmt.Println("Got", len(result), "items")
 
 	return result, nil
 }

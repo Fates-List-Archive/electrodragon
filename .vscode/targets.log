@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.3
 # Built for x86_64-redhat-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 16 16:32:05 2022
+# Make data base, printed on Thu Jun 23 13:36:50 2022
 
 # Variables
 
@@ -131,7 +129,7 @@ VIRTUAL_ENV_DISABLE_PROMPT = 1
 # environment
 LESS_TERMCAP_mb = [01;31m
 # environment
-SSH_CLIENT = 100.107.211.30 56968 911
+SSH_CLIENT = 100.107.211.30 50254 911
 # environment
 VSCODE_LOG_NATIVE = false
 # automatic
@@ -183,7 +181,7 @@ _ = /usr/bin/make
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-b42e2bb9-b363-4138-862e-3c91e68db37d.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-adfd940d-9a41-4043-8bce-2908be63bd3a.sock
 # environment
 GOMODCACHE = /home/meow/go/pkg/mod
 # environment
@@ -199,7 +197,7 @@ SELINUX_LEVEL_REQUESTED =
 # environment
 CYCLONE_TOKEN = NzQ1MjI2MjI1NDU0NDE1OTIz.XzusAQ.iFqKilQ8bDXkEvzS052GO8a1EWc
 # environment
-XDG_SESSION_ID = 91
+XDG_SESSION_ID = 142
 # environment
 GOPROXY = direct
 # default
@@ -213,7 +211,7 @@ PGUSER = fateslist
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
 # environment
-SSH_CONNECTION = 100.107.211.30 56968 100.67.94.49 911
+SSH_CONNECTION = 100.107.211.30 50254 100.67.94.49 911
 # variable set hash-table stats:
 # Load=101/1024=10%, Rehash=0, Collisions=8/131=6%
 
@@ -223,9 +221,9 @@ SSH_CONNECTION = 100.107.211.30 56968 100.67.94.49 911
 
 # Directories
 
-# . (device 64513, inode 395484): 22 files, no impossibilities.
+# . (device 64513, inode 395484): 24 files, no impossibilities.
 
-# 22 files, no impossibilities in 1 directories.
+# 24 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -282,13 +280,15 @@ mac:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 30 / storage = 226 B / avg = 7 B
-# current buf: size = 8162 B / used = 226 B / count = 30 / avg = 7 B
-
-# strcache performance: lookups = 37 / hit rate = 18%
-# hash-table stats:
  
-# Load=30/8192=0%, Rehash=0, Collisions=0/37=0%
-# Finished Make data base on Thu Jun 16 16:32:05 2022
+make: *** No rule to make target 'all'.  Stop.
+
+# strcache buffers: 1 (0) / strings = 32 / storage = 248 B / avg = 7 B
+# current buf: size = 8162 B / used = 248 B / count = 32 / avg = 7 B
+
+# strcache performance: lookups = 39 / hit rate = 17%
+# hash-table stats:
+# Load=32/8192=0%, Rehash=0, Collisions=0/39=0%
+# Finished Make data base on Thu Jun 23 13:36:50 2022
 
  

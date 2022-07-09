@@ -58,7 +58,7 @@ server privacy restrictions. **Note that when fetching invite links, requires lo
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -67,49 +67,49 @@ server privacy restrictions. **Note that when fetching invite links, requires lo
 **Response Body**
 
 - **user** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
 - **owner** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
-- **description** => string [ex ""]
+- **description** => string [""]
 - **tags** => (Array) 
-- **long_description_type** => i32 [ex 1]
-- **long_description** => string [ex ""]
-- **long_description_raw** => string [ex ""]
-- **vanity** => (Optional) string [ex "server-vanity"]
-- **guild_count** => i64 [ex 0]
-- **invite_amount** => i32 [ex 0]
-- **invite_link** => (Optional) string [ex "Only present if ``Frostpaw-Invite`` header is set"]
-- **created_at** => string [ex "1970-01-01T00:00:00Z"]
-- **state** => i32 [ex 0]
+- **long_description_type** => i32 [1]
+- **long_description** => string [""]
+- **long_description_raw** => string [""]
+- **vanity** => (Optional) string ["server-vanity"]
+- **guild_count** => i64 [0]
+- **invite_amount** => i32 [0]
+- **invite_link** => (Optional) string ["Only present if ``Frostpaw-Invite`` header is set"]
+- **created_at** => string ["1970-01-01T00:00:00Z"]
+- **state** => i32 [0]
 - **flags** => (Array) 
-- **css** => string [ex ""]
-- **css_raw** => string [ex "unsanitized css"]
+- **css** => string [""]
+- **css_raw** => string ["unsanitized css"]
 - **extra_links** => Map (key/value)  
 	- **key**
- => string [ex "value"]
+ => string ["value"]
 
 
 
-- **banner_card** => (Optional) string [ex "https://frostpaw.com/assets/img/banner-card.png"]
-- **banner_page** => (Optional) string [ex "https://frostpaw.com/assets/img/banner-page.png"]
-- **votes** => i64 [ex 0]
-- **total_votes** => i64 [ex 0]
+- **banner_card** => (Optional) string ["https://frostpaw.com/assets/img/banner-card.png"]
+- **banner_page** => (Optional) string ["https://frostpaw.com/assets/img/banner-page.png"]
+- **votes** => i64 [0]
+- **total_votes** => i64 [0]
 
 
 
@@ -183,23 +183,23 @@ def random_server():
 
 **Response Body**
 
-- **guild_count** => i64 [ex 30]
-- **description** => string [ex "My description"]
-- **banner** => string [ex "My banner or default banner url"]
-- **votes** => i64 [ex 40]
-- **state** => i32 [ex 3]
+- **guild_count** => i64 [30]
+- **description** => string ["My description"]
+- **banner** => string ["My banner or default banner url"]
+- **votes** => i64 [40]
+- **state** => i32 [3]
 - **user** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
 - **flags** => (Array) 
-- **created_at** => string [ex "2022-06-16T11:30:14.658141380Z"]
+- **created_at** => string ["2022-07-02T16:12:27.225015158Z"]
 
 
 
@@ -221,7 +221,7 @@ def random_server():
         "status": "Unknown"
     },
     "flags": [],
-    "created_at": "2022-06-16T11:30:14.658141380Z"
+    "created_at": "2022-07-02T16:12:27.225015158Z"
 }
 ```
 

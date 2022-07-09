@@ -67,16 +67,16 @@ This may change in the future and is given by ``per_page`` key.
 ``from`` contains the index/count of the first review of the page.
 **Query Parameters**
 
-- **target_type** => i32 [ex 0]
-- **page** => (Optional) i64 [ex 1]
-- **user_id** => (Optional) i64 [ex 0]
+- **target_type** => i32 [0]
+- **page** => (Optional) i64 [1]
+- **user_id** => (Optional) i64 [0]
 
 
 
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -86,22 +86,22 @@ This may change in the future and is given by ``per_page`` key.
 
 - **reviews** => (Array) Struct Review 
 	- **id** => None (unknown value type)
-	- **star_rating** => string [ex "0"]
-	- **review_text** => string [ex ""]
+	- **star_rating** => string ["0"]
+	- **review_text** => string [""]
 	- **votes** => Struct ParsedReviewVotes 
 		- **upvotes** => (Array) 
 		- **downvotes** => (Array) 
 
 
 
-	- **flagged** => bool [ex false]
+	- **flagged** => bool [false]
 	- **user** => Struct User 
-		- **id** => string [ex ""]
-		- **username** => string [ex ""]
-		- **disc** => string [ex ""]
-		- **avatar** => string [ex ""]
-		- **bot** => bool [ex false]
-		- **status** => string [ex "Unknown"]
+		- **id** => string [""]
+		- **username** => string [""]
+		- **disc** => string [""]
+		- **avatar** => string [""]
+		- **bot** => bool [false]
+		- **status** => string ["Unknown"]
 
 
 
@@ -111,32 +111,32 @@ This may change in the future and is given by ``per_page`` key.
 
 
 
-- **per_page** => i64 [ex 9]
-- **from** => i64 [ex 0]
+- **per_page** => i64 [9]
+- **from** => i64 [0]
 - **stats** => Struct ReviewStats 
-	- **average_stars** => string [ex "8.800000"]
-	- **total** => i64 [ex 78]
+	- **average_stars** => string ["8.800000"]
+	- **total** => i64 [78]
 
 
 
 - **user_review** => (Optional) Struct Review 
 	- **id** => None (unknown value type)
-	- **star_rating** => string [ex "0"]
-	- **review_text** => string [ex ""]
+	- **star_rating** => string ["0"]
+	- **review_text** => string [""]
 	- **votes** => Struct ParsedReviewVotes 
 		- **upvotes** => (Array) 
 		- **downvotes** => (Array) 
 
 
 
-	- **flagged** => bool [ex false]
+	- **flagged** => bool [false]
 	- **user** => Struct User 
-		- **id** => string [ex ""]
-		- **username** => string [ex ""]
-		- **disc** => string [ex ""]
-		- **avatar** => string [ex ""]
-		- **bot** => bool [ex false]
-		- **status** => string [ex "Unknown"]
+		- **id** => string [""]
+		- **username** => string [""]
+		- **disc** => string [""]
+		- **avatar** => string [""]
+		- **bot** => bool [false]
+		- **status** => string ["Unknown"]
 
 
 
@@ -231,16 +231,16 @@ The ``parent_id`` is optional and is used to create a reply to a review.
 also match the user token sent in the ``Authorization`` header
 **Query Parameters**
 
-- **target_type** => i32 [ex 0]
+- **target_type** => i32 [0]
 - **page** => None (unknown value type)
-- **user_id** => (Optional) i64 [ex 0]
+- **user_id** => (Optional) i64 [0]
 
 
 
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -248,28 +248,28 @@ also match the user token sent in the ``Authorization`` header
 **Request Body**
 
 - **id** => None (unknown value type)
-- **star_rating** => string [ex "0"]
-- **review_text** => string [ex ""]
+- **star_rating** => string ["0"]
+- **review_text** => string [""]
 - **votes** => Struct ParsedReviewVotes 
 	- **upvotes** => (Array) 
 	- **downvotes** => (Array) 
 
 
 
-- **flagged** => bool [ex false]
+- **flagged** => bool [false]
 - **user** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
 - **epoch** => (Array) 
 - **replies** => (Array) 
-- **parent_id** => (Optional) string [ex "bebcf5f9-78be-44e0-a285-9334c4bdfb6c"]
+- **parent_id** => (Optional) string ["c2b871f0-edcc-492d-a96b-3479c6e6bc2b"]
 
 
 
@@ -295,14 +295,14 @@ also match the user token sent in the ``Authorization`` header
     },
     "epoch": [],
     "replies": [],
-    "parent_id": "bebcf5f9-78be-44e0-a285-9334c4bdfb6c"
+    "parent_id": "c2b871f0-edcc-492d-a96b-3479c6e6bc2b"
 }
 ```
 
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -346,39 +346,39 @@ edit reviews using Lynx when required.
 also match the user token sent in the ``Authorization`` header
 **Query Parameters**
 
-- **target_type** => i32 [ex 0]
+- **target_type** => i32 [0]
 - **page** => None (unknown value type)
-- **user_id** => (Optional) i64 [ex 0]
+- **user_id** => (Optional) i64 [0]
 
 
 
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
 
 **Request Body**
 
-- **id** => (Optional) string [ex "878f549d-65d5-487e-b9c4-258a734d11ca"]
-- **star_rating** => string [ex "0"]
-- **review_text** => string [ex ""]
+- **id** => (Optional) string ["70d80b71-e239-465f-98d9-160520b5c6be"]
+- **star_rating** => string ["0"]
+- **review_text** => string [""]
 - **votes** => Struct ParsedReviewVotes 
 	- **upvotes** => (Array) 
 	- **downvotes** => (Array) 
 
 
 
-- **flagged** => bool [ex false]
+- **flagged** => bool [false]
 - **user** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
@@ -392,7 +392,7 @@ also match the user token sent in the ``Authorization`` header
 
 ```json
 {
-    "id": "878f549d-65d5-487e-b9c4-258a734d11ca",
+    "id": "70d80b71-e239-465f-98d9-160520b5c6be",
     "star_rating": "0",
     "review_text": "",
     "votes": {
@@ -417,7 +417,7 @@ also match the user token sent in the ``Authorization`` header
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -456,16 +456,16 @@ in the future.
 set this anyways so you might as well set it correctly.
 **Query Parameters**
 
-- **target_type** => i32 [ex 0]
+- **target_type** => i32 [0]
 - **page** => None (unknown value type)
-- **user_id** => (Optional) i64 [ex 0]
+- **user_id** => (Optional) i64 [0]
 
 
 
 
 **Path Parameters**
 
-- **rid** => string [ex "e628eed4-56e4-4f6b-b670-21d512e031a7"]
+- **rid** => string ["c7774f68-5060-435c-ae63-0b6e74ca73ff"]
 
 
 
@@ -473,7 +473,7 @@ set this anyways so you might as well set it correctly.
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -515,15 +515,15 @@ in the future.
 
 **Path Parameters**
 
-- **rid** => string [ex "28b5f234-9aa4-469d-9e16-8bfcf8af79c4"]
+- **rid** => string ["65f718b1-9e27-425f-969b-581e3e36b589"]
 
 
 
 
 **Request Body**
 
-- **user_id** => string [ex "user id here"]
-- **upvote** => bool [ex true]
+- **user_id** => string ["user id here"]
+- **upvote** => bool [true]
 
 
 
@@ -539,7 +539,7 @@ in the future.
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 

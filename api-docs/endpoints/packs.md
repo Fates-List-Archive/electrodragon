@@ -55,44 +55,44 @@ but must exist in the object
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
 
 **Request Body**
 
-- **id** => string [ex "0"]
-- **name** => string [ex ""]
-- **description** => string [ex ""]
-- **icon** => string [ex ""]
-- **banner** => string [ex ""]
+- **id** => string ["0"]
+- **name** => string [""]
+- **description** => string [""]
+- **icon** => string [""]
+- **banner** => string [""]
 - **resolved_bots** => (Array) Struct ResolvedPackBot 
 	- **user** => Struct User 
-		- **id** => string [ex ""]
-		- **username** => string [ex ""]
-		- **disc** => string [ex ""]
-		- **avatar** => string [ex ""]
-		- **bot** => bool [ex false]
-		- **status** => string [ex "Unknown"]
+		- **id** => string [""]
+		- **username** => string [""]
+		- **disc** => string [""]
+		- **avatar** => string [""]
+		- **bot** => bool [false]
+		- **status** => string ["Unknown"]
 
 
 
-	- **description** => string [ex ""]
+	- **description** => string [""]
 
 
 
 - **owner** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
-- **created_at** => string [ex "1970-01-01T00:00:00Z"]
+- **created_at** => string ["1970-01-01T00:00:00Z"]
 
 
 
@@ -133,7 +133,7 @@ but must exist in the object
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -165,44 +165,44 @@ but must exist in the object
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
 
 **Request Body**
 
-- **id** => string [ex "10f718a9-f467-4dbb-8d62-d1ff722cba8b"]
-- **name** => string [ex ""]
-- **description** => string [ex ""]
-- **icon** => string [ex ""]
-- **banner** => string [ex ""]
+- **id** => string ["66ac0866-c0d8-41f9-a3d1-dab279824108"]
+- **name** => string [""]
+- **description** => string [""]
+- **icon** => string [""]
+- **banner** => string [""]
 - **resolved_bots** => (Array) Struct ResolvedPackBot 
 	- **user** => Struct User 
-		- **id** => string [ex ""]
-		- **username** => string [ex ""]
-		- **disc** => string [ex ""]
-		- **avatar** => string [ex ""]
-		- **bot** => bool [ex false]
-		- **status** => string [ex "Unknown"]
+		- **id** => string [""]
+		- **username** => string [""]
+		- **disc** => string [""]
+		- **avatar** => string [""]
+		- **bot** => bool [false]
+		- **status** => string ["Unknown"]
 
 
 
-	- **description** => string [ex ""]
+	- **description** => string [""]
 
 
 
 - **owner** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
-- **created_at** => string [ex "1970-01-01T00:00:00Z"]
+- **created_at** => string ["1970-01-01T00:00:00Z"]
 
 
 
@@ -210,7 +210,7 @@ but must exist in the object
 
 ```json
 {
-    "id": "10f718a9-f467-4dbb-8d62-d1ff722cba8b",
+    "id": "66ac0866-c0d8-41f9-a3d1-dab279824108",
     "name": "",
     "description": "",
     "icon": "",
@@ -243,7 +243,7 @@ but must exist in the object
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -273,8 +273,8 @@ Deletes a bot pack.
 
 **Path Parameters**
 
-- **user_id** => i64 [ex 0]
-- **pack_id** => string [ex "70d8f954-035a-4452-9915-965a38c9ca2e"]
+- **user_id** => i64 [0]
+- **pack_id** => string ["05d07db5-6560-4ac4-9bc0-c4fbe6d15b83"]
 
 
 
@@ -282,7 +282,7 @@ Deletes a bot pack.
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 

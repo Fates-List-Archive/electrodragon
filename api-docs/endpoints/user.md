@@ -54,7 +54,7 @@ May be used by our partners to get user information.
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -62,12 +62,12 @@ May be used by our partners to get user information.
 
 **Response Body**
 
-- **id** => string [ex ""]
-- **username** => string [ex ""]
-- **disc** => string [ex ""]
-- **avatar** => string [ex ""]
-- **bot** => bool [ex false]
-- **status** => string [ex "Unknown"]
+- **id** => string [""]
+- **username** => string [""]
+- **disc** => string [""]
+- **avatar** => string [""]
+- **bot** => bool [false]
+- **status** => string ["Unknown"]
 
 
 
@@ -97,7 +97,7 @@ Internally is used by client for extra owner rendering etc.
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -105,10 +105,10 @@ Internally is used by client for extra owner rendering etc.
 
 **Response Body**
 
-- **id** => string [ex ""]
-- **staff_id** => string [ex ""]
-- **perm** => f32 [ex 0]
-- **fname** => string [ex ""]
+- **id** => string [""]
+- **staff_id** => string [""]
+- **perm** => f32 [0]
+- **fname** => string [""]
 
 
 
@@ -133,7 +133,7 @@ Gets a user profile.
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -142,55 +142,55 @@ Gets a user profile.
 **Response Body**
 
 - **user** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
 - **connections** => (Array) Struct FrostpawUserConnection 
 	- **client** => Struct FrostpawClient 
-		- **id** => string [ex ""]
-		- **name** => string [ex ""]
-		- **domain** => string [ex ""]
-		- **privacy_policy** => string [ex ""]
+		- **id** => string [""]
+		- **name** => string [""]
+		- **domain** => string [""]
+		- **privacy_policy** => string [""]
 		- **owner** => Struct User 
-			- **id** => string [ex ""]
-			- **username** => string [ex ""]
-			- **disc** => string [ex ""]
-			- **avatar** => string [ex ""]
-			- **bot** => bool [ex false]
-			- **status** => string [ex "Unknown"]
+			- **id** => string [""]
+			- **username** => string [""]
+			- **disc** => string [""]
+			- **avatar** => string [""]
+			- **bot** => bool [false]
+			- **status** => string ["Unknown"]
 
 
 
-		- **verified** => bool [ex false]
+		- **verified** => bool [false]
 
 
 
-	- **expires_on** => string [ex "1970-01-01T00:00:00Z"]
-	- **repeats** => i64 [ex 0]
+	- **expires_on** => string ["1970-01-01T00:00:00Z"]
+	- **repeats** => i64 [0]
 
 
 
 - **bots** => (Array) 
-- **description_raw** => string [ex ""]
-- **description** => string [ex ""]
-- **profile_css** => string [ex ""]
-- **user_css** => string [ex ""]
-- **vote_reminder_channel** => (Optional) string [ex "939123825885474898"]
+- **description_raw** => string [""]
+- **description** => string [""]
+- **profile_css** => string [""]
+- **user_css** => string [""]
+- **vote_reminder_channel** => (Optional) string ["939123825885474898"]
 - **packs** => (Array) 
-- **state** => i32 [ex 0]
-- **site_lang** => string [ex ""]
+- **state** => i32 [0]
+- **site_lang** => string [""]
 - **action_logs** => (Array) Struct ActionLog 
-	- **user_id** => string [ex ""]
-	- **bot_id** => string [ex ""]
-	- **action** => i32 [ex 0]
-	- **action_time** => string [ex "1970-01-01T00:00:00Z"]
-	- **context** => (Optional) string [ex "Some context as to why the action happened"]
+	- **user_id** => string [""]
+	- **bot_id** => string [""]
+	- **action** => i32 [0]
+	- **action_time** => string ["1970-01-01T00:00:00Z"]
+	- **context** => (Optional) string ["Some context as to why the action happened"]
 
 
 
@@ -274,7 +274,7 @@ be present
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -282,31 +282,31 @@ be present
 **Request Body**
 
 - **user** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
 - **connections** => (Array) 
 - **bots** => (Array) 
-- **description_raw** => string [ex ""]
-- **description** => string [ex ""]
-- **profile_css** => string [ex ""]
-- **user_css** => string [ex ""]
-- **vote_reminder_channel** => (Optional) string [ex "939123825885474898"]
+- **description_raw** => string [""]
+- **description** => string [""]
+- **profile_css** => string [""]
+- **user_css** => string [""]
+- **vote_reminder_channel** => (Optional) string ["939123825885474898"]
 - **packs** => (Array) 
-- **state** => i32 [ex 0]
-- **site_lang** => string [ex ""]
+- **state** => i32 [0]
+- **site_lang** => string [""]
 - **action_logs** => (Array) Struct ActionLog 
-	- **user_id** => string [ex ""]
-	- **bot_id** => string [ex ""]
-	- **action** => i32 [ex 0]
-	- **action_time** => string [ex "1970-01-01T00:00:00Z"]
-	- **context** => (Optional) string [ex "Some context as to why the action happened"]
+	- **user_id** => string [""]
+	- **bot_id** => string [""]
+	- **action** => i32 [0]
+	- **action_time** => string ["1970-01-01T00:00:00Z"]
+	- **context** => (Optional) string ["Some context as to why the action happened"]
 
 
 
@@ -359,7 +359,7 @@ be present
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -385,7 +385,7 @@ Gives user roles on the Fates List support server
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -393,8 +393,8 @@ Gives user roles on the Fates List support server
 
 **Response Body**
 
-- **bot_developer** => bool [ex false]
-- **certified_developer** => bool [ex false]
+- **bot_developer** => bool [false]
+- **certified_developer** => bool [false]
 
 
 

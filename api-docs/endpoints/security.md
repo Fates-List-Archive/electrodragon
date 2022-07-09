@@ -51,7 +51,7 @@ token ever gets leaked! Also used by the official client
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -59,7 +59,7 @@ token ever gets leaked! Also used by the official client
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -87,7 +87,7 @@ token ever gets leaked! Also used by the official client
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -95,7 +95,7 @@ token ever gets leaked! Also used by the official client
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -123,7 +123,7 @@ token ever gets leaked.
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
+- **id** => i64 [0]
 
 
 
@@ -131,7 +131,7 @@ token ever gets leaked.
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -160,8 +160,8 @@ token ever gets leaked.
 
 **Path Parameters**
 
-- **id** => i64 [ex 0]
-- **client_id** => string [ex "client_id"]
+- **id** => i64 [0]
+- **client_id** => string ["client_id"]
 
 
 
@@ -169,7 +169,7 @@ token ever gets leaked.
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 

@@ -60,9 +60,9 @@ Once login succeeds and is authorized by the user, then the user will be redirec
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
-- **context** => (Optional) string [ex "https://discord.com/........."]
+- **context** => (Optional) string ["https://discord.com/........."]
 
 
 
@@ -88,7 +88,7 @@ Returns the Frostpaw client with the given ID.
 
 **Path Parameters**
 
-- **id** => string [ex "client id here"]
+- **id** => string ["client id here"]
 
 
 
@@ -96,21 +96,21 @@ Returns the Frostpaw client with the given ID.
 
 **Response Body**
 
-- **id** => string [ex ""]
-- **name** => string [ex ""]
-- **domain** => string [ex ""]
-- **privacy_policy** => string [ex ""]
+- **id** => string [""]
+- **name** => string [""]
+- **domain** => string [""]
+- **privacy_policy** => string [""]
 - **owner** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
-- **verified** => bool [ex false]
+- **verified** => bool [false]
 
 
 
@@ -146,7 +146,7 @@ Refreshes a token for the given client.
 
 **Path Parameters**
 
-- **id** => string [ex "client id here"]
+- **id** => string ["client id here"]
 
 
 
@@ -154,9 +154,9 @@ Refreshes a token for the given client.
 
 **Response Body**
 
-- **done** => bool [ex true]
-- **reason** => (Optional) string [ex "Error code, if any"]
-- **context** => (Optional) string [ex "Refresh token, if everything went ok :)"]
+- **done** => bool [true]
+- **reason** => (Optional) string ["Error code, if any"]
+- **context** => (Optional) string ["Refresh token, if everything went ok :)"]
 
 
 
@@ -191,9 +191,9 @@ by the site to login.
 
 **Request Body**
 
-- **code** => string [ex "code from discord oauth"]
-- **state** => (Optional) string [ex "Random UUID right now"]
-- **frostpaw** => bool [ex true]
+- **code** => string ["code from discord oauth"]
+- **state** => (Optional) string ["Random UUID right now"]
+- **frostpaw** => bool [true]
 - **frostpaw_blood** => None (unknown value type)
 - **frostpaw_claw** => None (unknown value type)
 - **frostpaw_claw_unseathe_time** => None (unknown value type)
@@ -216,20 +216,20 @@ by the site to login.
 
 **Response Body**
 
-- **state** => i32 [ex 0]
-- **token** => string [ex ""]
+- **state** => i32 [0]
+- **token** => string [""]
 - **refresh_token** => None (unknown value type)
 - **user** => Struct User 
-	- **id** => string [ex ""]
-	- **username** => string [ex ""]
-	- **disc** => string [ex ""]
-	- **avatar** => string [ex ""]
-	- **bot** => bool [ex false]
-	- **status** => string [ex "Unknown"]
+	- **id** => string [""]
+	- **username** => string [""]
+	- **disc** => string [""]
+	- **avatar** => string [""]
+	- **bot** => bool [false]
+	- **status** => string ["Unknown"]
 
 
 
-- **site_lang** => string [ex ""]
+- **site_lang** => string [""]
 - **css** => None (unknown value type)
 - **user_experiments** => (Array) 
 

@@ -53,16 +53,16 @@ Creates a appeal for a bot.
 
 **Path Parameters**
 
-- **user_id** => i64 [ex 0]
-- **bot_id** => i64 [ex 0]
+- **user_id** => i64 [0]
+- **bot_id** => i64 [0]
 
 
 
 
 **Request Body**
 
-- **request_type** => i32 [ex 0]
-- **appeal** => string [ex "This bot deserves to be unbanned because..."]
+- **request_type** => i32 [0]
+- **appeal** => string ["This bot deserves to be unbanned because..."]
 
 
 
@@ -78,7 +78,7 @@ Creates a appeal for a bot.
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
@@ -110,16 +110,16 @@ Creates a appeal for a server.
 
 **Path Parameters**
 
-- **user_id** => i64 [ex 0]
-- **server_id** => i64 [ex 0]
+- **user_id** => i64 [0]
+- **server_id** => i64 [0]
 
 
 
 
 **Request Body**
 
-- **request_type** => i32 [ex 0]
-- **appeal** => string [ex "This server deserves to be unbanned because..."]
+- **request_type** => i32 [0]
+- **appeal** => string ["This server deserves to be unbanned because..."]
 
 
 
@@ -135,7 +135,7 @@ Creates a appeal for a server.
 
 **Response Body**
 
-- **done** => bool [ex true]
+- **done** => bool [true]
 - **reason** => None (unknown value type)
 - **context** => None (unknown value type)
 
