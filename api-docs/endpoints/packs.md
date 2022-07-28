@@ -31,6 +31,8 @@ you prefix the token with `User`. **A access token (for custom clients)
 can also be used on *most* endpoints as long as the token is prefixed with 
 ``Frostpaw``**
 
+- **Special:** These endpoint employ their own authentication system (such as ``slwebset``)
+
 ## Base Response
 
 A default API Response will be of the below format:
@@ -172,7 +174,7 @@ but must exist in the object
 
 **Request Body**
 
-- **id** => string ["66ac0866-c0d8-41f9-a3d1-dab279824108"]
+- **id** => string ["d38b8a05-958a-4e53-942d-530692032d88"]
 - **name** => string [""]
 - **description** => string [""]
 - **icon** => string [""]
@@ -210,7 +212,7 @@ but must exist in the object
 
 ```json
 {
-    "id": "66ac0866-c0d8-41f9-a3d1-dab279824108",
+    "id": "d38b8a05-958a-4e53-942d-530692032d88",
     "name": "",
     "description": "",
     "icon": "",
@@ -274,7 +276,7 @@ Deletes a bot pack.
 **Path Parameters**
 
 - **user_id** => i64 [0]
-- **pack_id** => string ["05d07db5-6560-4ac4-9bc0-c4fbe6d15b83"]
+- **pack_id** => string ["3b570fdc-edaf-4348-948d-f633fb84c624"]
 
 
 

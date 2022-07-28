@@ -45,44 +45,45 @@ A default API Response will be of the below format:
 }
 ```
 
-## Create Bot Appeal
-### POST `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}/appeal
+## Get Bot List Stats
+### GET `https://api.fateslist.xyz`/stats
 
-Creates a appeal for a bot.
+Returns the bot list stats. This currently returns the full list of all bots
+as a vector/list of IndexBot structs.
 
-``request_type`` is a [AppealType](./enums#appealtype)
-                
+As a client, it is your responsibility, to parse this. Pagination may be added
+if the list grows and then requires it.
 
-**Path Parameters**
-
-- **user_id** => i64 [0]
-- **bot_id** => i64 [0]
-
-
-
-
-**Request Body**
-
-- **request_type** => i32 [0]
-- **appeal** => string ["This bot deserves to be unbanned because..."]
-
-
-
-**Request Body Example**
-
-```json
-{
-    "request_type": 0,
-    "appeal": "This bot deserves to be unbanned because..."
-}
-```
 
 
 **Response Body**
 
-- **done** => bool [true]
-- **reason** => None (unknown value type)
-- **context** => None (unknown value type)
+- **total_bots** => i64 [0]
+- **total_servers** => i64 [0]
+- **total_users** => i64 [0]
+- **bots** => (Array) Struct IndexBot 
+	- **guild_count** => i64 [30]
+	- **description** => string ["My description"]
+	- **banner** => string ["My banner or default banner url"]
+	- **votes** => i64 [40]
+	- **state** => i32 [3]
+	- **user** => Struct User 
+		- **id** => string [""]
+		- **username** => string [""]
+		- **disc** => string [""]
+		- **avatar** => string [""]
+		- **bot** => bool [false]
+		- **status** => string ["Unknown"]
+
+
+
+	- **flags** => (Array) 
+	- **created_at** => string ["2022-07-26T10:42:34.895837087Z"]
+
+
+
+- **servers** => (Array) 
+- **uptime** => f64 [0]
 
 
 
@@ -90,70 +91,34 @@ Creates a appeal for a bot.
 
 ```json
 {
-    "done": true,
-    "reason": null,
-    "context": null
+    "total_bots": 0,
+    "total_servers": 0,
+    "total_users": 0,
+    "bots": [
+        {
+            "guild_count": 30,
+            "description": "My description",
+            "banner": "My banner or default banner url",
+            "votes": 40,
+            "state": 3,
+            "user": {
+                "id": "",
+                "username": "",
+                "disc": "",
+                "avatar": "",
+                "bot": false,
+                "status": "Unknown"
+            },
+            "flags": [],
+            "created_at": "2022-07-26T10:42:34.895837087Z"
+        }
+    ],
+    "servers": [],
+    "uptime": 0.0
 }
 ```
 
 
-**Authorization Needed** | [User](#authorization)
-
-
-## Create Server Appeal
-### POST `https://api.fateslist.xyz`/users/{user_id}/servers/{server_id}/appeal
-
-Creates a appeal for a server.
-
-**Currently only `report` is supported by this endpoint**
-
-``request_type`` is a [AppealType](./enums#appealtype)
-                
-
-**Path Parameters**
-
-- **user_id** => i64 [0]
-- **server_id** => i64 [0]
-
-
-
-
-**Request Body**
-
-- **request_type** => i32 [0]
-- **appeal** => string ["This server deserves to be unbanned because..."]
-
-
-
-**Request Body Example**
-
-```json
-{
-    "request_type": 0,
-    "appeal": "This server deserves to be unbanned because..."
-}
-```
-
-
-**Response Body**
-
-- **done** => bool [true]
-- **reason** => None (unknown value type)
-- **context** => None (unknown value type)
-
-
-
-**Response Body Example**
-
-```json
-{
-    "done": true,
-    "reason": null,
-    "context": null
-}
-```
-
-
-**Authorization Needed** | [User](#authorization)
+**Authorization Needed** | None
 
 

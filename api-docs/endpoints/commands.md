@@ -45,26 +45,53 @@ A default API Response will be of the below format:
 }
 ```
 
-## Create Bot Appeal
-### POST `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}/appeal
+## Add Command
+### POST `https://api.fateslist.xyz`/bots/{id}/commands
 
-Creates a appeal for a bot.
+Creates a command.
 
-``request_type`` is a [AppealType](./enums#appealtype)
-                
+The ``id`` here must be the bot id you wish to add the command for
+
+**This performs a *upsert* meaning it will either create or update 
+the command depending on its ``name``.**
+
+**Only post up to 10-20 commands at a time, otherwise requests may be truncated
+or otherwise fail with odd errors.  If you have more than this, then perform 
+multiple requests**
+
+``target_type`` is a [TargetType](./enums#targettype)
+**Query Parameters**
+
+- **target_type** => i32 [0]
+
+
+
 
 **Path Parameters**
 
-- **user_id** => i64 [0]
-- **bot_id** => i64 [0]
+- **id** => i64 [0]
 
 
 
 
 **Request Body**
 
-- **request_type** => i32 [0]
-- **appeal** => string ["This bot deserves to be unbanned because..."]
+- **commands** => (Array) Struct BotCommand 
+	- **cmd_type** => i32 [0]
+	- **groups** => (Array) 
+	- **name** => string [""]
+	- **vote_locked** => bool [false]
+	- **description** => string [""]
+	- **args** => (Array) 
+	- **examples** => (Array) 
+	- **premium_only** => bool [false]
+	- **notes** => (Array) 
+	- **doc_link** => None (unknown value type)
+	- **id** => None (unknown value type)
+	- **nsfw** => bool [false]
+
+
+
 
 
 
@@ -72,8 +99,22 @@ Creates a appeal for a bot.
 
 ```json
 {
-    "request_type": 0,
-    "appeal": "This bot deserves to be unbanned because..."
+    "commands": [
+        {
+            "cmd_type": 0,
+            "groups": [],
+            "name": "",
+            "vote_locked": false,
+            "description": "",
+            "args": [],
+            "examples": [],
+            "premium_only": false,
+            "notes": [],
+            "doc_link": null,
+            "id": null,
+            "nsfw": false
+        }
+    ]
 }
 ```
 
@@ -97,42 +138,33 @@ Creates a appeal for a bot.
 ```
 
 
-**Authorization Needed** | [User](#authorization)
+**Authorization Needed** | [Bot](#authorization)
 
 
-## Create Server Appeal
-### POST `https://api.fateslist.xyz`/users/{user_id}/servers/{server_id}/appeal
+## Delete Commands
+### DELETE `https://api.fateslist.xyz`/bots/{id}/commands
 
-Creates a appeal for a server.
+DELETE a command.
 
-**Currently only `report` is supported by this endpoint**
+The ``id`` here must be the bot id you wish to add the command for
 
-``request_type`` is a [AppealType](./enums#appealtype)
-                
+``names`` and ``ids`` must be a ``|`` seperated list of ``names`` or valid
+UUIDs in the case of ids. Bad names/ids will be ignored
+**Query Parameters**
+
+- **nuke** => (Optional) bool [false]
+- **names** => (Optional) string ["command name|command name 2"]
+- **ids** => (Optional) string ["id 1|id 2"]
+
+
+
 
 **Path Parameters**
 
-- **user_id** => i64 [0]
-- **server_id** => i64 [0]
+- **id** => i64 [0]
 
 
 
-
-**Request Body**
-
-- **request_type** => i32 [0]
-- **appeal** => string ["This server deserves to be unbanned because..."]
-
-
-
-**Request Body Example**
-
-```json
-{
-    "request_type": 0,
-    "appeal": "This server deserves to be unbanned because..."
-}
-```
 
 
 **Response Body**
@@ -154,6 +186,6 @@ Creates a appeal for a server.
 ```
 
 
-**Authorization Needed** | [User](#authorization)
+**Authorization Needed** | [Bot](#authorization)
 
 

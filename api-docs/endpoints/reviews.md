@@ -31,6 +31,8 @@ you prefix the token with `User`. **A access token (for custom clients)
 can also be used on *most* endpoints as long as the token is prefixed with 
 ``Frostpaw``**
 
+- **Special:** These endpoint employ their own authentication system (such as ``slwebset``)
+
 ## Base Response
 
 A default API Response will be of the below format:
@@ -269,7 +271,7 @@ also match the user token sent in the ``Authorization`` header
 
 - **epoch** => (Array) 
 - **replies** => (Array) 
-- **parent_id** => (Optional) string ["c2b871f0-edcc-492d-a96b-3479c6e6bc2b"]
+- **parent_id** => (Optional) string ["d5d92f15-6bda-47a4-b5ef-9a12c082ba86"]
 
 
 
@@ -295,7 +297,7 @@ also match the user token sent in the ``Authorization`` header
     },
     "epoch": [],
     "replies": [],
-    "parent_id": "c2b871f0-edcc-492d-a96b-3479c6e6bc2b"
+    "parent_id": "d5d92f15-6bda-47a4-b5ef-9a12c082ba86"
 }
 ```
 
@@ -362,7 +364,7 @@ also match the user token sent in the ``Authorization`` header
 
 **Request Body**
 
-- **id** => (Optional) string ["70d80b71-e239-465f-98d9-160520b5c6be"]
+- **id** => (Optional) string ["29f7c0b8-4a4a-415b-a30d-1d2997160244"]
 - **star_rating** => string ["0"]
 - **review_text** => string [""]
 - **votes** => Struct ParsedReviewVotes 
@@ -392,7 +394,7 @@ also match the user token sent in the ``Authorization`` header
 
 ```json
 {
-    "id": "70d80b71-e239-465f-98d9-160520b5c6be",
+    "id": "29f7c0b8-4a4a-415b-a30d-1d2997160244",
     "star_rating": "0",
     "review_text": "",
     "votes": {
@@ -465,7 +467,7 @@ set this anyways so you might as well set it correctly.
 
 **Path Parameters**
 
-- **rid** => string ["c7774f68-5060-435c-ae63-0b6e74ca73ff"]
+- **rid** => string ["38d0b255-458a-4107-a89d-5e009e7e024b"]
 
 
 
@@ -515,7 +517,7 @@ in the future.
 
 **Path Parameters**
 
-- **rid** => string ["65f718b1-9e27-425f-969b-581e3e36b589"]
+- **rid** => string ["a2dd91d5-fdd3-4242-b276-af18563a0f16"]
 
 
 

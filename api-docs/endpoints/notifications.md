@@ -45,37 +45,48 @@ A default API Response will be of the below format:
 }
 ```
 
-## Create Bot Appeal
-### POST `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}/appeal
+## Get Notification Public Info
+### GET `https://api.fateslist.xyz`/notifications/info
+Get the public information required for creating a push notification
+**Query Parameters**
 
-Creates a appeal for a bot.
+- **endpoint** => string [""]
+- **p256dh** => string [""]
+- **auth** => string [""]
 
-``request_type`` is a [AppealType](./enums#appealtype)
-                
+
+
 
 **Path Parameters**
 
-- **user_id** => i64 [0]
-- **bot_id** => i64 [0]
+- **id** => i64 [0]
 
 
 
 
-**Request Body**
 
-- **request_type** => i32 [0]
-- **appeal** => string ["This bot deserves to be unbanned because..."]
+**Response Body**
+
+- **public_key** => string [""]
 
 
 
-**Request Body Example**
+**Response Body Example**
 
 ```json
 {
-    "request_type": 0,
-    "appeal": "This bot deserves to be unbanned because..."
+    "public_key": ""
 }
 ```
+
+
+**Authorization Needed** | None
+
+
+## Create Push Notification Subscription
+### POST `https://api.fateslist.xyz`/notifications/{id}/sub
+Subscribes a user to a push notification.
+
 
 
 **Response Body**
@@ -100,39 +111,10 @@ Creates a appeal for a bot.
 **Authorization Needed** | [User](#authorization)
 
 
-## Create Server Appeal
-### POST `https://api.fateslist.xyz`/users/{user_id}/servers/{server_id}/appeal
+## Create Test Push Notification
+### GET `https://api.fateslist.xyz`/notifications/{id}/test
+Creates a test push notification
 
-Creates a appeal for a server.
-
-**Currently only `report` is supported by this endpoint**
-
-``request_type`` is a [AppealType](./enums#appealtype)
-                
-
-**Path Parameters**
-
-- **user_id** => i64 [0]
-- **server_id** => i64 [0]
-
-
-
-
-**Request Body**
-
-- **request_type** => i32 [0]
-- **appeal** => string ["This server deserves to be unbanned because..."]
-
-
-
-**Request Body Example**
-
-```json
-{
-    "request_type": 0,
-    "appeal": "This server deserves to be unbanned because..."
-}
-```
 
 
 **Response Body**

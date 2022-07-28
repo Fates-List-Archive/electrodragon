@@ -31,6 +31,8 @@ you prefix the token with `User`. **A access token (for custom clients)
 can also be used on *most* endpoints as long as the token is prefixed with 
 ``Frostpaw``**
 
+- **Special:** These endpoint employ their own authentication system (such as ``slwebset``)
+
 ## Base Response
 
 A default API Response will be of the below format:
@@ -139,7 +141,6 @@ This API returns some empty fields such as ``webhook``, ``webhook_secret``, ``ap
 This is to allow reuse of the Bot struct in Get Bot Settings which *does* contain this sensitive data. 
 
 **Set the Frostpaw header if you are a custom client. Send Frostpaw-Invite header on invites**
-                
 
 **Path Parameters**
 
@@ -254,7 +255,7 @@ This is to allow reuse of the Bot struct in Get Bot Settings which *does* contai
 - **events** => (Array) Struct BotEvent 
 	- **id** => string ["Some UUID here"]
 	- **event_type** => i32 [0]
-	- **ts** => string ["2022-07-02T16:12:27.224681037Z"]
+	- **ts** => string ["2022-07-26T10:42:34.896318136Z"]
 	- **reason** => string ["Some reason here"]
 	- **css** => string ["Some CSS here"]
 
@@ -369,7 +370,7 @@ This is to allow reuse of the Bot struct in Get Bot Settings which *does* contai
         {
             "id": "Some UUID here",
             "event_type": 0,
-            "ts": "2022-07-02T16:12:27.224681037Z",
+            "ts": "2022-07-26T10:42:34.896318136Z",
             "reason": "Some reason here",
             "css": "Some CSS here"
         }
@@ -515,7 +516,7 @@ Staff members *must* instead use Lynx.
 	- **events** => (Array) Struct BotEvent 
 		- **id** => string ["Some UUID here"]
 		- **event_type** => i32 [0]
-		- **ts** => string ["2022-07-02T16:12:27.224742882Z"]
+		- **ts** => string ["2022-07-26T10:42:34.896429548Z"]
 		- **reason** => string ["Some reason here"]
 		- **css** => string ["Some CSS here"]
 
@@ -654,7 +655,7 @@ Staff members *must* instead use Lynx.
             {
                 "id": "Some UUID here",
                 "event_type": 0,
-                "ts": "2022-07-02T16:12:27.224742882Z",
+                "ts": "2022-07-26T10:42:34.896429548Z",
                 "reason": "Some reason here",
                 "css": "Some CSS here"
             }
@@ -728,7 +729,7 @@ def random_bot():
 
 
 - **flags** => (Array) 
-- **created_at** => string ["2022-07-02T16:12:27.224835508Z"]
+- **created_at** => string ["2022-07-26T10:42:34.896510154Z"]
 
 
 
@@ -750,7 +751,7 @@ def random_bot():
         "status": "Unknown"
     },
     "flags": [],
-    "created_at": "2022-07-02T16:12:27.224835508Z"
+    "created_at": "2022-07-26T10:42:34.896510154Z"
 }
 ```
 
@@ -885,7 +886,7 @@ to false.
 - **events** => (Array) Struct BotEvent 
 	- **id** => string ["Some UUID here"]
 	- **event_type** => i32 [0]
-	- **ts** => string ["2022-07-02T16:12:27.224845538Z"]
+	- **ts** => string ["2022-07-26T10:42:34.896526051Z"]
 	- **reason** => string ["Some reason here"]
 	- **css** => string ["Some CSS here"]
 
@@ -1000,7 +1001,7 @@ to false.
         {
             "id": "Some UUID here",
             "event_type": 0,
-            "ts": "2022-07-02T16:12:27.224845538Z",
+            "ts": "2022-07-26T10:42:34.896526051Z",
             "reason": "Some reason here",
             "css": "Some CSS here"
         }
@@ -1163,7 +1164,7 @@ to false.
 - **events** => (Array) Struct BotEvent 
 	- **id** => string ["Some UUID here"]
 	- **event_type** => i32 [0]
-	- **ts** => string ["2022-07-02T16:12:27.224890680Z"]
+	- **ts** => string ["2022-07-26T10:42:34.896600145Z"]
 	- **reason** => string ["Some reason here"]
 	- **css** => string ["Some CSS here"]
 
@@ -1278,7 +1279,7 @@ to false.
         {
             "id": "Some UUID here",
             "event_type": 0,
-            "ts": "2022-07-02T16:12:27.224890680Z",
+            "ts": "2022-07-26T10:42:34.896600145Z",
             "reason": "Some reason here",
             "css": "Some CSS here"
         }

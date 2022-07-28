@@ -31,6 +31,8 @@ you prefix the token with `User`. **A access token (for custom clients)
 can also be used on *most* endpoints as long as the token is prefixed with 
 ``Frostpaw``**
 
+- **Special:** These endpoint employ their own authentication system (such as ``slwebset``)
+
 ## Base Response
 
 A default API Response will be of the below format:
@@ -57,6 +59,27 @@ Returns the index for bots and servers
 
 **Response Body**
 
+- **random** => Struct IndexBot 
+	- **guild_count** => i64 [30]
+	- **description** => string ["My description"]
+	- **banner** => string ["My banner or default banner url"]
+	- **votes** => i64 [40]
+	- **state** => i32 [3]
+	- **user** => Struct User 
+		- **id** => string [""]
+		- **username** => string [""]
+		- **disc** => string [""]
+		- **avatar** => string [""]
+		- **bot** => bool [false]
+		- **status** => string ["Unknown"]
+
+
+
+	- **flags** => (Array) 
+	- **created_at** => string ["2022-07-26T10:42:34.895870537Z"]
+
+
+
 - **new** => (Array) Struct IndexBot 
 	- **guild_count** => i64 [30]
 	- **description** => string ["My description"]
@@ -74,7 +97,7 @@ Returns the index for bots and servers
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-02T16:12:27.224429856Z"]
+	- **created_at** => string ["2022-07-26T10:42:34.895837087Z"]
 
 
 
@@ -95,7 +118,7 @@ Returns the index for bots and servers
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-02T16:12:27.224429856Z"]
+	- **created_at** => string ["2022-07-26T10:42:34.895837087Z"]
 
 
 
@@ -116,7 +139,7 @@ Returns the index for bots and servers
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-02T16:12:27.224429856Z"]
+	- **created_at** => string ["2022-07-26T10:42:34.895837087Z"]
 
 
 
@@ -143,6 +166,23 @@ Returns the index for bots and servers
 
 ```json
 {
+    "random": {
+        "guild_count": 30,
+        "description": "My description",
+        "banner": "My banner or default banner url",
+        "votes": 40,
+        "state": 3,
+        "user": {
+            "id": "",
+            "username": "",
+            "disc": "",
+            "avatar": "",
+            "bot": false,
+            "status": "Unknown"
+        },
+        "flags": [],
+        "created_at": "2022-07-26T10:42:34.895870537Z"
+    },
     "new": [
         {
             "guild_count": 30,
@@ -159,7 +199,7 @@ Returns the index for bots and servers
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-02T16:12:27.224429856Z"
+            "created_at": "2022-07-26T10:42:34.895837087Z"
         }
     ],
     "top_voted": [
@@ -178,7 +218,7 @@ Returns the index for bots and servers
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-02T16:12:27.224429856Z"
+            "created_at": "2022-07-26T10:42:34.895837087Z"
         }
     ],
     "certified": [
@@ -197,7 +237,7 @@ Returns the index for bots and servers
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-02T16:12:27.224429856Z"
+            "created_at": "2022-07-26T10:42:34.895837087Z"
         }
     ],
     "tags": [
@@ -221,6 +261,58 @@ Returns the index for bots and servers
 
 
 **Authorization Needed** | None
+
+
+## Ping
+### GET `https://api.fateslist.xyz`/ping
+Returns nothing
+
+
+
+
+**Authorization Needed** | None
+
+
+## Set Server Listing By Web
+### POST `https://api.fateslist.xyz`/slwebset
+Sets the server listing on the web (after ``/webset`` command). Set ``Authorization`` to the token given by webset
+
+
+**Request Body**
+
+- **value** => string [""]
+
+
+
+**Request Body Example**
+
+```json
+{
+    "value": ""
+}
+```
+
+
+**Response Body**
+
+- **done** => bool [true]
+- **reason** => None (unknown value type)
+- **context** => (Optional) string ["https://discord.com/........."]
+
+
+
+**Response Body Example**
+
+```json
+{
+    "done": true,
+    "reason": null,
+    "context": "https://discord.com/........."
+}
+```
+
+
+**Authorization Needed** | [Special](#authorization)
 
 
 ## Get Experiment List
@@ -385,7 +477,7 @@ Using -1 for ``gc_to`` will disable ``gc_to`` field
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-02T16:12:27.224546142Z"]
+	- **created_at** => string ["2022-07-26T10:42:34.896096149Z"]
 
 
 
@@ -406,7 +498,7 @@ Using -1 for ``gc_to`` will disable ``gc_to`` field
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-02T16:12:27.224546391Z"]
+	- **created_at** => string ["2022-07-26T10:42:34.896096646Z"]
 
 
 
@@ -504,7 +596,7 @@ Using -1 for ``gc_to`` will disable ``gc_to`` field
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-02T16:12:27.224546142Z"
+            "created_at": "2022-07-26T10:42:34.896096149Z"
         }
     ],
     "servers": [
@@ -523,7 +615,7 @@ Using -1 for ``gc_to`` will disable ``gc_to`` field
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-02T16:12:27.224546391Z"
+            "created_at": "2022-07-26T10:42:34.896096646Z"
         }
     ],
     "profiles": [
@@ -627,7 +719,7 @@ Searches the list based on a tag named ``q``.
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-02T16:12:27.224586650Z"]
+	- **created_at** => string ["2022-07-26T10:42:34.896157397Z"]
 
 
 
@@ -648,7 +740,7 @@ Searches the list based on a tag named ``q``.
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-02T16:12:27.224586917Z"]
+	- **created_at** => string ["2022-07-26T10:42:34.896157809Z"]
 
 
 
@@ -746,7 +838,7 @@ Searches the list based on a tag named ``q``.
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-02T16:12:27.224586650Z"
+            "created_at": "2022-07-26T10:42:34.896157397Z"
         }
     ],
     "servers": [
@@ -765,7 +857,7 @@ Searches the list based on a tag named ``q``.
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-02T16:12:27.224586917Z"
+            "created_at": "2022-07-26T10:42:34.896157809Z"
         }
     ],
     "profiles": [
@@ -852,6 +944,27 @@ index is too costly and making a new struct is unnecessary.
 
 **Response Body**
 
+- **random** => Struct IndexBot 
+	- **guild_count** => i64 [30]
+	- **description** => string ["My description"]
+	- **banner** => string ["My banner or default banner url"]
+	- **votes** => i64 [40]
+	- **state** => i32 [3]
+	- **user** => Struct User 
+		- **id** => string [""]
+		- **username** => string [""]
+		- **disc** => string [""]
+		- **avatar** => string [""]
+		- **bot** => bool [false]
+		- **status** => string ["Unknown"]
+
+
+
+	- **flags** => (Array) 
+	- **created_at** => string ["2022-07-26T10:42:34.896209147Z"]
+
+
+
 - **new** => (Array) 
 - **top_voted** => (Array) 
 - **certified** => (Array) 
@@ -878,6 +991,23 @@ index is too costly and making a new struct is unnecessary.
 
 ```json
 {
+    "random": {
+        "guild_count": 30,
+        "description": "My description",
+        "banner": "My banner or default banner url",
+        "votes": 40,
+        "state": 3,
+        "user": {
+            "id": "",
+            "username": "",
+            "disc": "",
+            "avatar": "",
+            "bot": false,
+            "status": "Unknown"
+        },
+        "flags": [],
+        "created_at": "2022-07-26T10:42:34.896209147Z"
+    },
     "new": [],
     "top_voted": [],
     "certified": [],

@@ -31,6 +31,8 @@ you prefix the token with `User`. **A access token (for custom clients)
 can also be used on *most* endpoints as long as the token is prefixed with 
 ``Frostpaw``**
 
+- **Special:** These endpoint employ their own authentication system (such as ``slwebset``)
+
 ## Base Response
 
 A default API Response will be of the below format:
@@ -199,7 +201,7 @@ def random_server():
 
 
 - **flags** => (Array) 
-- **created_at** => string ["2022-07-02T16:12:27.225015158Z"]
+- **created_at** => string ["2022-07-26T10:42:34.896756794Z"]
 
 
 
@@ -221,7 +223,7 @@ def random_server():
         "status": "Unknown"
     },
     "flags": [],
-    "created_at": "2022-07-02T16:12:27.225015158Z"
+    "created_at": "2022-07-26T10:42:34.896756794Z"
 }
 ```
 
