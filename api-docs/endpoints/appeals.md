@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Create Bot Appeal
-### POST `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}/appeal
+### POST `https://fates-api.select-list.xyz`/users/{user_id}/bots/{bot_id}/appeal
 
 Creates a appeal for a bot.
 
@@ -101,7 +101,7 @@ Creates a appeal for a bot.
 
 
 ## Create Server Appeal
-### POST `https://api.fateslist.xyz`/users/{user_id}/servers/{server_id}/appeal
+### POST `https://fates-api.select-list.xyz`/users/{user_id}/servers/{server_id}/appeal
 
 Creates a appeal for a server.
 

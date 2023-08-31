@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Index
-### GET `https://api.fateslist.xyz`/index
+### GET `https://fates-api.select-list.xyz`/index
 Returns the index for bots and servers
 **Query Parameters**
 
@@ -76,7 +76,7 @@ Returns the index for bots and servers
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.895870537Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.731287735Z"]
 
 
 
@@ -97,7 +97,7 @@ Returns the index for bots and servers
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.895837087Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.730426102Z"]
 
 
 
@@ -118,7 +118,7 @@ Returns the index for bots and servers
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.895837087Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.730426102Z"]
 
 
 
@@ -139,7 +139,7 @@ Returns the index for bots and servers
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.895837087Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.730426102Z"]
 
 
 
@@ -181,7 +181,7 @@ Returns the index for bots and servers
             "status": "Unknown"
         },
         "flags": [],
-        "created_at": "2022-07-26T10:42:34.895870537Z"
+        "created_at": "2023-08-31T12:48:33.731287735Z"
     },
     "new": [
         {
@@ -199,7 +199,7 @@ Returns the index for bots and servers
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-26T10:42:34.895837087Z"
+            "created_at": "2023-08-31T12:48:33.730426102Z"
         }
     ],
     "top_voted": [
@@ -218,7 +218,7 @@ Returns the index for bots and servers
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-26T10:42:34.895837087Z"
+            "created_at": "2023-08-31T12:48:33.730426102Z"
         }
     ],
     "certified": [
@@ -237,7 +237,7 @@ Returns the index for bots and servers
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-26T10:42:34.895837087Z"
+            "created_at": "2023-08-31T12:48:33.730426102Z"
         }
     ],
     "tags": [
@@ -264,7 +264,7 @@ Returns the index for bots and servers
 
 
 ## Ping
-### GET `https://api.fateslist.xyz`/ping
+### GET `https://fates-api.select-list.xyz`/ping
 Returns nothing
 
 
@@ -274,7 +274,7 @@ Returns nothing
 
 
 ## Set Server Listing By Web
-### POST `https://api.fateslist.xyz`/slwebset
+### POST `https://fates-api.select-list.xyz`/slwebset
 Sets the server listing on the web (after ``/webset`` command). Set ``Authorization`` to the token given by webset
 
 
@@ -316,7 +316,7 @@ Sets the server listing on the web (after ``/webset`` command). Set ``Authorizat
 
 
 ## Get Experiment List
-### GET `https://api.fateslist.xyz`/experiments
+### GET `https://fates-api.select-list.xyz`/experiments
 Returns all currently available experiments
 
 
@@ -350,7 +350,7 @@ Returns all currently available experiments
 
 
 ## Resolve Vanity
-### GET `https://api.fateslist.xyz`/code/{code}
+### GET `https://fates-api.select-list.xyz`/code/{code}
 Resolves the vanity for a bot/server in the list
 
 **Path Parameters**
@@ -382,7 +382,7 @@ Resolves the vanity for a bot/server in the list
 
 
 ## Get Partners
-### GET `https://api.fateslist.xyz`/partners
+### GET `https://fates-api.select-list.xyz`/partners
 Get current partnership list
 
 
@@ -442,7 +442,7 @@ Get current partnership list
 
 
 ## Search List
-### GET `https://api.fateslist.xyz`/search?q={query}
+### GET `https://fates-api.select-list.xyz`/search?q={query}
 
 Searches the list based on a query named ``q``. 
         
@@ -477,7 +477,7 @@ Using -1 for ``gc_to`` will disable ``gc_to`` field
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.896096149Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.733518715Z"]
 
 
 
@@ -498,7 +498,7 @@ Using -1 for ``gc_to`` will disable ``gc_to`` field
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.896096646Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.733519843Z"]
 
 
 
@@ -596,7 +596,7 @@ Using -1 for ``gc_to`` will disable ``gc_to`` field
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-26T10:42:34.896096149Z"
+            "created_at": "2023-08-31T12:48:33.733518715Z"
         }
     ],
     "servers": [
@@ -615,7 +615,7 @@ Using -1 for ``gc_to`` will disable ``gc_to`` field
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-26T10:42:34.896096646Z"
+            "created_at": "2023-08-31T12:48:33.733519843Z"
         }
     ],
     "profiles": [
@@ -689,7 +689,7 @@ Using -1 for ``gc_to`` will disable ``gc_to`` field
 
 
 ## Search Tags
-### GET `https://api.fateslist.xyz`/search-tags?q={query}
+### GET `https://fates-api.select-list.xyz`/search-tags?q={query}
 Searches the list based on a tag named ``q``.
 **Query Parameters**
 
@@ -719,7 +719,7 @@ Searches the list based on a tag named ``q``.
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.896157397Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.733653840Z"]
 
 
 
@@ -740,7 +740,7 @@ Searches the list based on a tag named ``q``.
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.896157809Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.733654536Z"]
 
 
 
@@ -838,7 +838,7 @@ Searches the list based on a tag named ``q``.
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-26T10:42:34.896157397Z"
+            "created_at": "2023-08-31T12:48:33.733653840Z"
         }
     ],
     "servers": [
@@ -857,7 +857,7 @@ Searches the list based on a tag named ``q``.
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-26T10:42:34.896157809Z"
+            "created_at": "2023-08-31T12:48:33.733654536Z"
         }
     ],
     "profiles": [
@@ -931,7 +931,7 @@ Searches the list based on a tag named ``q``.
 
 
 ## Mini Index
-### GET `https://api.fateslist.xyz`/mini-index
+### GET `https://fates-api.select-list.xyz`/mini-index
 
 Returns a mini-index which is basically a Index but with only ``tags``
 and ``features`` having any data. Other fields are empty arrays/vectors.
@@ -961,7 +961,7 @@ index is too costly and making a new struct is unnecessary.
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.896209147Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.733765924Z"]
 
 
 
@@ -1006,7 +1006,7 @@ index is too costly and making a new struct is unnecessary.
             "status": "Unknown"
         },
         "flags": [],
-        "created_at": "2022-07-26T10:42:34.896209147Z"
+        "created_at": "2023-08-31T12:48:33.733765924Z"
     },
     "new": [],
     "top_voted": [],

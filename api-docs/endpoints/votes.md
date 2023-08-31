@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Create Bot Vote
-### PATCH `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}/votes
+### PATCH `https://fates-api.select-list.xyz`/users/{user_id}/bots/{bot_id}/votes
 This endpoint creates a vote for a bot which can only be done *once* every 8 hours.
 **Query Parameters**
 
@@ -87,7 +87,7 @@ This endpoint creates a vote for a bot which can only be done *once* every 8 hou
 
 
 ## Create Server Vote
-### PATCH `https://api.fateslist.xyz`/users/{user_id}/servers/{server_id}/votes
+### PATCH `https://fates-api.select-list.xyz`/users/{user_id}/servers/{server_id}/votes
 
 This endpoint creates a vote for a server which can only be done *once* every 8 hours
 and is independent from a bot vote.
@@ -131,7 +131,7 @@ and is independent from a bot vote.
 
 
 ## Get Bot Votes
-### GET `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}/votes
+### GET `https://fates-api.select-list.xyz`/users/{user_id}/bots/{bot_id}/votes
 
 Endpoint to check amount of votes a user has.
 
@@ -186,7 +186,7 @@ this however, it is prone to change *anytime* in the future and may return bogus
 
 
 ## Get Server Votes
-### GET `https://api.fateslist.xyz`/users/{user_id}/servers/{server_id}/votes
+### GET `https://fates-api.select-list.xyz`/users/{user_id}/servers/{server_id}/votes
 
 Endpoint to check amount of votes a user has.
 

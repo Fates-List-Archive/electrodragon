@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Get Notification Public Info
-### GET `https://api.fateslist.xyz`/notifications/info
+### GET `https://fates-api.select-list.xyz`/notifications/info
 Get the public information required for creating a push notification
 **Query Parameters**
 
@@ -84,7 +84,7 @@ Get the public information required for creating a push notification
 
 
 ## Create Push Notification Subscription
-### POST `https://api.fateslist.xyz`/notifications/{id}/sub
+### POST `https://fates-api.select-list.xyz`/notifications/{id}/sub
 Subscribes a user to a push notification.
 
 
@@ -112,7 +112,7 @@ Subscribes a user to a push notification.
 
 
 ## Create Test Push Notification
-### GET `https://api.fateslist.xyz`/notifications/{id}/test
+### GET `https://fates-api.select-list.xyz`/notifications/{id}/test
 Creates a test push notification
 
 

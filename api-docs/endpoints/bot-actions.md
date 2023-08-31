@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Post Stats
-### POST `https://api.fateslist.xyz`/bots/{id}/stats
+### POST `https://fates-api.select-list.xyz`/bots/{id}/stats
 
 Post stats to the list
 
@@ -127,7 +127,7 @@ def post_stats(bot_id: int, guild_count: int):
 
 
 ## Get Bot
-### GET `https://api.fateslist.xyz`/bots/{id}
+### GET `https://fates-api.select-list.xyz`/bots/{id}
 
 Fetches bot information given a bot ID. If not found, 404 will be returned. 
 
@@ -215,8 +215,8 @@ This is to allow reuse of the Bot struct in Get Bot Settings which *does* contai
 - **votes** => i64 [0]
 - **total_votes** => i64 [0]
 - **vanity** => string [""]
-- **banner_card** => (Optional) string ["https://api.fateslist.xyz/static/botlisticon.webp"]
-- **banner_page** => (Optional) string ["https://api.fateslist.xyz/static/botlisticon.webp"]
+- **banner_card** => (Optional) string ["<api url>/static/botlisticon.webp"]
+- **banner_page** => (Optional) string ["<api url>/static/botlisticon.webp"]
 - **client_id** => string [""]
 - **flags** => (Array) 
 - **action_logs** => (Array) Struct ActionLog 
@@ -255,7 +255,7 @@ This is to allow reuse of the Bot struct in Get Bot Settings which *does* contai
 - **events** => (Array) Struct BotEvent 
 	- **id** => string ["Some UUID here"]
 	- **event_type** => i32 [0]
-	- **ts** => string ["2022-07-26T10:42:34.896318136Z"]
+	- **ts** => string ["2023-08-31T12:48:33.733950839Z"]
 	- **reason** => string ["Some reason here"]
 	- **css** => string ["Some CSS here"]
 
@@ -329,8 +329,8 @@ This is to allow reuse of the Bot struct in Get Bot Settings which *does* contai
     "votes": 0,
     "total_votes": 0,
     "vanity": "",
-    "banner_card": "https://api.fateslist.xyz/static/botlisticon.webp",
-    "banner_page": "https://api.fateslist.xyz/static/botlisticon.webp",
+    "banner_card": "<api url>/static/botlisticon.webp",
+    "banner_page": "<api url>/static/botlisticon.webp",
     "client_id": "",
     "flags": [],
     "action_logs": [
@@ -370,7 +370,7 @@ This is to allow reuse of the Bot struct in Get Bot Settings which *does* contai
         {
             "id": "Some UUID here",
             "event_type": 0,
-            "ts": "2022-07-26T10:42:34.896318136Z",
+            "ts": "2023-08-31T12:48:33.733950839Z",
             "reason": "Some reason here",
             "css": "Some CSS here"
         }
@@ -388,7 +388,7 @@ This is to allow reuse of the Bot struct in Get Bot Settings which *does* contai
 
 
 ## Get Bot Settings
-### GET `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}/settings
+### GET `https://fates-api.select-list.xyz`/users/{user_id}/bots/{bot_id}/settings
 
 Returns the bot settings.
 
@@ -476,8 +476,8 @@ Staff members *must* instead use Lynx.
 	- **votes** => i64 [0]
 	- **total_votes** => i64 [0]
 	- **vanity** => string [""]
-	- **banner_card** => (Optional) string ["https://api.fateslist.xyz/static/botlisticon.webp"]
-	- **banner_page** => (Optional) string ["https://api.fateslist.xyz/static/botlisticon.webp"]
+	- **banner_card** => (Optional) string ["<api url>/static/botlisticon.webp"]
+	- **banner_page** => (Optional) string ["<api url>/static/botlisticon.webp"]
 	- **client_id** => string [""]
 	- **flags** => (Array) 
 	- **action_logs** => (Array) Struct ActionLog 
@@ -516,7 +516,7 @@ Staff members *must* instead use Lynx.
 	- **events** => (Array) Struct BotEvent 
 		- **id** => string ["Some UUID here"]
 		- **event_type** => i32 [0]
-		- **ts** => string ["2022-07-26T10:42:34.896429548Z"]
+		- **ts** => string ["2023-08-31T12:48:33.734123694Z"]
 		- **reason** => string ["Some reason here"]
 		- **css** => string ["Some CSS here"]
 
@@ -614,8 +614,8 @@ Staff members *must* instead use Lynx.
         "votes": 0,
         "total_votes": 0,
         "vanity": "",
-        "banner_card": "https://api.fateslist.xyz/static/botlisticon.webp",
-        "banner_page": "https://api.fateslist.xyz/static/botlisticon.webp",
+        "banner_card": "<api url>/static/botlisticon.webp",
+        "banner_page": "<api url>/static/botlisticon.webp",
         "client_id": "",
         "flags": [],
         "action_logs": [
@@ -655,7 +655,7 @@ Staff members *must* instead use Lynx.
             {
                 "id": "Some UUID here",
                 "event_type": 0,
-                "ts": "2022-07-26T10:42:34.896429548Z",
+                "ts": "2023-08-31T12:48:33.734123694Z",
                 "reason": "Some reason here",
                 "css": "Some CSS here"
             }
@@ -692,7 +692,7 @@ Staff members *must* instead use Lynx.
 
 
 ## Random Bot
-### GET `https://api.fateslist.xyz`/random-bot
+### GET `https://fates-api.select-list.xyz`/random-bot
 
 Fetches a random bot on the list
 
@@ -729,7 +729,7 @@ def random_bot():
 
 
 - **flags** => (Array) 
-- **created_at** => string ["2022-07-26T10:42:34.896510154Z"]
+- **created_at** => string ["2023-08-31T12:48:33.734331278Z"]
 
 
 
@@ -751,7 +751,7 @@ def random_bot():
         "status": "Unknown"
     },
     "flags": [],
-    "created_at": "2022-07-26T10:42:34.896510154Z"
+    "created_at": "2023-08-31T12:48:33.734331278Z"
 }
 ```
 
@@ -760,7 +760,7 @@ def random_bot():
 
 
 ## Add Bot
-### POST `https://api.fateslist.xyz`/users/{id}/bots
+### POST `https://fates-api.select-list.xyz`/users/{id}/bots
 
 Creates a new bot. 
 
@@ -846,8 +846,8 @@ to false.
 - **votes** => i64 [0]
 - **total_votes** => i64 [0]
 - **vanity** => string [""]
-- **banner_card** => (Optional) string ["https://api.fateslist.xyz/static/botlisticon.webp"]
-- **banner_page** => (Optional) string ["https://api.fateslist.xyz/static/botlisticon.webp"]
+- **banner_card** => (Optional) string ["<api url>/static/botlisticon.webp"]
+- **banner_page** => (Optional) string ["<api url>/static/botlisticon.webp"]
 - **client_id** => string [""]
 - **flags** => (Array) 
 - **action_logs** => (Array) Struct ActionLog 
@@ -886,7 +886,7 @@ to false.
 - **events** => (Array) Struct BotEvent 
 	- **id** => string ["Some UUID here"]
 	- **event_type** => i32 [0]
-	- **ts** => string ["2022-07-26T10:42:34.896526051Z"]
+	- **ts** => string ["2023-08-31T12:48:33.734367843Z"]
 	- **reason** => string ["Some reason here"]
 	- **css** => string ["Some CSS here"]
 
@@ -960,8 +960,8 @@ to false.
     "votes": 0,
     "total_votes": 0,
     "vanity": "",
-    "banner_card": "https://api.fateslist.xyz/static/botlisticon.webp",
-    "banner_page": "https://api.fateslist.xyz/static/botlisticon.webp",
+    "banner_card": "<api url>/static/botlisticon.webp",
+    "banner_page": "<api url>/static/botlisticon.webp",
     "client_id": "",
     "flags": [],
     "action_logs": [
@@ -1001,7 +1001,7 @@ to false.
         {
             "id": "Some UUID here",
             "event_type": 0,
-            "ts": "2022-07-26T10:42:34.896526051Z",
+            "ts": "2023-08-31T12:48:33.734367843Z",
             "reason": "Some reason here",
             "css": "Some CSS here"
         }
@@ -1038,7 +1038,7 @@ to false.
 
 
 ## Edit Bot
-### PATCH `https://api.fateslist.xyz`/users/{id}/bots
+### PATCH `https://fates-api.select-list.xyz`/users/{id}/bots
 
 Edits a existing bot. 
 
@@ -1124,8 +1124,8 @@ to false.
 - **votes** => i64 [0]
 - **total_votes** => i64 [0]
 - **vanity** => string [""]
-- **banner_card** => (Optional) string ["https://api.fateslist.xyz/static/botlisticon.webp"]
-- **banner_page** => (Optional) string ["https://api.fateslist.xyz/static/botlisticon.webp"]
+- **banner_card** => (Optional) string ["<api url>/static/botlisticon.webp"]
+- **banner_page** => (Optional) string ["<api url>/static/botlisticon.webp"]
 - **client_id** => string [""]
 - **flags** => (Array) 
 - **action_logs** => (Array) Struct ActionLog 
@@ -1164,7 +1164,7 @@ to false.
 - **events** => (Array) Struct BotEvent 
 	- **id** => string ["Some UUID here"]
 	- **event_type** => i32 [0]
-	- **ts** => string ["2022-07-26T10:42:34.896600145Z"]
+	- **ts** => string ["2023-08-31T12:48:33.734540734Z"]
 	- **reason** => string ["Some reason here"]
 	- **css** => string ["Some CSS here"]
 
@@ -1238,8 +1238,8 @@ to false.
     "votes": 0,
     "total_votes": 0,
     "vanity": "",
-    "banner_card": "https://api.fateslist.xyz/static/botlisticon.webp",
-    "banner_page": "https://api.fateslist.xyz/static/botlisticon.webp",
+    "banner_card": "<api url>/static/botlisticon.webp",
+    "banner_page": "<api url>/static/botlisticon.webp",
     "client_id": "",
     "flags": [],
     "action_logs": [
@@ -1279,7 +1279,7 @@ to false.
         {
             "id": "Some UUID here",
             "event_type": 0,
-            "ts": "2022-07-26T10:42:34.896600145Z",
+            "ts": "2023-08-31T12:48:33.734540734Z",
             "reason": "Some reason here",
             "css": "Some CSS here"
         }
@@ -1316,7 +1316,7 @@ to false.
 
 
 ## Transfer Ownership
-### PATCH `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}/main-owner
+### PATCH `https://fates-api.select-list.xyz`/users/{user_id}/bots/{bot_id}/main-owner
 
 Transfers bot ownership.
 
@@ -1387,7 +1387,7 @@ You **must** be main owner of the bot to use this endpoint.
 
 
 ## Delete Bot
-### DELETE `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}
+### DELETE `https://fates-api.select-list.xyz`/users/{user_id}/bots/{bot_id}
 
 Deletes a bot.
 
@@ -1425,7 +1425,7 @@ You **must** be main owner of the bot to use this endpoint.
 
 
 ## Get Import Sources
-### GET `https://api.fateslist.xyz`/import-sources
+### GET `https://fates-api.select-list.xyz`/import-sources
 Returns a array of sources that a bot can be imported from.
 
 
@@ -1459,7 +1459,7 @@ Returns a array of sources that a bot can be imported from.
 
 
 ## Import Bot
-### POST `https://api.fateslist.xyz`/users/{user_id}/bots/{bot_id}/import?src={source}
+### POST `https://fates-api.select-list.xyz`/users/{user_id}/bots/{bot_id}/import?src={source}
 Imports a bot from a source listed in ``Get Import Sources``
 **Query Parameters**
 

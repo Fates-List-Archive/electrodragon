@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## New Bot Token
-### DELETE `https://api.fateslist.xyz`/bots/{id}/token
+### DELETE `https://fates-api.select-list.xyz`/bots/{id}/token
 
 'Deletes' a bot token and reissues a new bot token. Use this if your bots
 token ever gets leaked! Also used by the official client
@@ -82,7 +82,7 @@ token ever gets leaked! Also used by the official client
 
 
 ## New User Token
-### DELETE `https://api.fateslist.xyz`/users/{id}/token
+### DELETE `https://fates-api.select-list.xyz`/users/{id}/token
 
 'Deletes' a user token and reissues a new user token. Use this if your bots
 token ever gets leaked! Also used by the official client
@@ -118,7 +118,7 @@ token ever gets leaked! Also used by the official client
 
 
 ## New Server Token
-### DELETE `https://api.fateslist.xyz`/servers/{id}/token
+### DELETE `https://fates-api.select-list.xyz`/servers/{id}/token
 
 'Deletes' a server token and reissues a new server token. Use this if your server
 token ever gets leaked.
@@ -154,7 +154,7 @@ token ever gets leaked.
 
 
 ## Revoke Frostpaw Client Auth
-### DELETE `https://api.fateslist.xyz`/users/{id}/frostpaw/clients/{client_id}
+### DELETE `https://fates-api.select-list.xyz`/users/{id}/frostpaw/clients/{client_id}
 
 'Deletes' a user token and reissues a new user token. Use this if your user
 token ever gets leaked.

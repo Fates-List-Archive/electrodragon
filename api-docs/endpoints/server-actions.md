@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Get Server
-### GET `https://api.fateslist.xyz`/servers/{id}
+### GET `https://fates-api.select-list.xyz`/servers/{id}
 
 Fetches server information given a server/guild ID. If not found, 404 will be returned. 
 
@@ -164,7 +164,7 @@ server privacy restrictions. **Note that when fetching invite links, requires lo
 
 
 ## Random Server
-### GET `https://api.fateslist.xyz`/random-server
+### GET `https://fates-api.select-list.xyz`/random-server
 
 Fetches a random server on the list
 
@@ -201,7 +201,7 @@ def random_server():
 
 
 - **flags** => (Array) 
-- **created_at** => string ["2022-07-26T10:42:34.896756794Z"]
+- **created_at** => string ["2023-08-31T12:48:33.738322161Z"]
 
 
 
@@ -223,7 +223,7 @@ def random_server():
         "status": "Unknown"
     },
     "flags": [],
-    "created_at": "2022-07-26T10:42:34.896756794Z"
+    "created_at": "2023-08-31T12:48:33.738322161Z"
 }
 ```
 

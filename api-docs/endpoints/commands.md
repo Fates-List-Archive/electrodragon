@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Add Command
-### POST `https://api.fateslist.xyz`/bots/{id}/commands
+### POST `https://fates-api.select-list.xyz`/bots/{id}/commands
 
 Creates a command.
 
@@ -142,7 +142,7 @@ multiple requests**
 
 
 ## Delete Commands
-### DELETE `https://api.fateslist.xyz`/bots/{id}/commands
+### DELETE `https://fates-api.select-list.xyz`/bots/{id}/commands
 
 DELETE a command.
 

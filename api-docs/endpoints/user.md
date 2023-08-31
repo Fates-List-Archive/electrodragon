@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Get User From ID
-### GET `https://api.fateslist.xyz`/blazefire/{id}
+### GET `https://fates-api.select-list.xyz`/blazefire/{id}
 
 Gets a User object given a ID. 
 
@@ -91,7 +91,7 @@ May be used by our partners to get user information.
 
 
 ## Get User Perms
-### GET `https://api.fateslist.xyz`/baypaw/perms/{id}
+### GET `https://fates-api.select-list.xyz`/baypaw/perms/{id}
 
 Gets the permissions of a user from Baypaw (our microservices handling user fetching and permissions)
 
@@ -130,7 +130,7 @@ Internally is used by client for extra owner rendering etc.
 
 
 ## Get Profile
-### GET `https://api.fateslist.xyz`/profiles/{id}
+### GET `https://fates-api.select-list.xyz`/profiles/{id}
 Gets a user profile.
 
 **Path Parameters**
@@ -267,7 +267,7 @@ Gets a user profile.
 
 
 ## Update Profile
-### PATCH `https://api.fateslist.xyz`/profiles/{id}
+### PATCH `https://fates-api.select-list.xyz`/profiles/{id}
 
 Edits a user profile.
 
@@ -382,7 +382,7 @@ be present
 
 
 ## Receive Profile Roles
-### PUT `https://api.fateslist.xyz`/profiles/{id}/roles
+### PUT `https://fates-api.select-list.xyz`/profiles/{id}/roles
 Gives user roles on the Fates List support server
 
 **Path Parameters**

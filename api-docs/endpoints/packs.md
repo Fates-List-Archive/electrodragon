@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Add Pack
-### POST `https://api.fateslist.xyz`/users/{id}/packs
+### POST `https://fates-api.select-list.xyz`/users/{id}/packs
 
 Creates a bot pack. 
 
@@ -156,7 +156,7 @@ but must exist in the object
 
 
 ## Edit Pack
-### PATCH `https://api.fateslist.xyz`/users/{id}/packs
+### PATCH `https://fates-api.select-list.xyz`/users/{id}/packs
 
 Edits a bot pack. 
 
@@ -174,7 +174,7 @@ but must exist in the object
 
 **Request Body**
 
-- **id** => string ["d38b8a05-958a-4e53-942d-530692032d88"]
+- **id** => string ["8a0d22af-d491-4206-bf13-902b952f2e93"]
 - **name** => string [""]
 - **description** => string [""]
 - **icon** => string [""]
@@ -212,7 +212,7 @@ but must exist in the object
 
 ```json
 {
-    "id": "d38b8a05-958a-4e53-942d-530692032d88",
+    "id": "8a0d22af-d491-4206-bf13-902b952f2e93",
     "name": "",
     "description": "",
     "icon": "",
@@ -266,7 +266,7 @@ but must exist in the object
 
 
 ## Delete Pack
-### DELETE `https://api.fateslist.xyz`/users/{user_id}/packs/{pack_id}
+### DELETE `https://fates-api.select-list.xyz`/users/{user_id}/packs/{pack_id}
 
 Deletes a bot pack. 
 
@@ -276,7 +276,7 @@ Deletes a bot pack.
 **Path Parameters**
 
 - **user_id** => i64 [0]
-- **pack_id** => string ["3b570fdc-edaf-4348-948d-f633fb84c624"]
+- **pack_id** => string ["d3ed9f2f-6fc0-41ef-ac8f-c82135fda1a1"]
 
 
 

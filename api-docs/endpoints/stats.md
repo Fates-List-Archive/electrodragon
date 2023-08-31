@@ -1,7 +1,7 @@
 
-**API URL**: ``https://api.fateslist.xyz``
+**API URL**: ``https://fates-api.select-list.xyz``
 
-**Widgets Documentation:** ``https://lynx.fateslist.xyz/widgets`` (docs for widgets available at https://lynx.fateslist.xyz/widgets)
+**Widgets Documentation:** ``https://fates-lynx.select-list.xyz/widgets`` 
 
 ## Authorization
 
@@ -46,7 +46,7 @@ A default API Response will be of the below format:
 ```
 
 ## Get Bot List Stats
-### GET `https://api.fateslist.xyz`/stats
+### GET `https://fates-api.select-list.xyz`/stats
 
 Returns the bot list stats. This currently returns the full list of all bots
 as a vector/list of IndexBot structs.
@@ -78,7 +78,7 @@ if the list grows and then requires it.
 
 
 	- **flags** => (Array) 
-	- **created_at** => string ["2022-07-26T10:42:34.895837087Z"]
+	- **created_at** => string ["2023-08-31T12:48:33.730426102Z"]
 
 
 
@@ -110,7 +110,7 @@ if the list grows and then requires it.
                 "status": "Unknown"
             },
             "flags": [],
-            "created_at": "2022-07-26T10:42:34.895837087Z"
+            "created_at": "2023-08-31T12:48:33.730426102Z"
         }
     ],
     "servers": [],
